@@ -3,27 +3,70 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List, Tuple, Set, Optional
+import threading
+import time
+import functools
+from queue import Queue
 
 # Token counting function: Uses tiktoken if available; otherwise falls back to a regex-based method.
 try:
     import tiktoken
-
+    
+    # Cache for token counts to avoid recounting the same text
+    token_cache = {}
+    
     def count_tokens(text: str) -> int:
         """
         Returns the token count of the given text using the "cl100k_base" encoding,
-        which is appropriate for LLM contexts.
+        which is appropriate for LLM contexts. Uses caching for performance.
         """
+        # Use hash of text as key to avoid storing large strings in memory
+        text_hash = hash(text)
+        if text_hash in token_cache:
+            return token_cache[text_hash]
+            
         encoding = tiktoken.get_encoding("cl100k_base")
         tokens = encoding.encode(text)
-        return len(tokens)
+        count = len(tokens)
+        token_cache[text_hash] = count
+        return count
 except ImportError:
+    # Simple LRU cache for token counts
+    token_cache = {}
+    MAX_CACHE_SIZE = 100
+    
     def count_tokens(text: str) -> int:
         """
         Fallback method for token counting using regex when tiktoken is not available.
+        Uses caching for performance.
         """
+        # Use hash of text as key to avoid storing large strings in memory
+        text_hash = hash(text)
+        if text_hash in token_cache:
+            return token_cache[text_hash]
+            
         tokens = re.findall(r"\w+|[^\w\s]", text, re.UNICODE)
-        return len(tokens)
+        count = len(tokens)
+        
+        # Manage cache size
+        if len(token_cache) >= MAX_CACHE_SIZE:
+            # Remove a random item (simple approach)
+            token_cache.pop(next(iter(token_cache)))
+        
+        token_cache[text_hash] = count
+        return count
+
+
+def threaded(fn):
+    """Decorator to run a function in a separate thread"""
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        thread = threading.Thread(target=fn, args=args, kwargs=kwargs)
+        thread.daemon = True
+        thread.start()
+        return thread
+    return wrapper
 
 
 class FileExplorer:
@@ -31,11 +74,21 @@ class FileExplorer:
         """Initialize the File & Folder Viewer with LLM context token counter."""
         self.master: tk.Tk = master
         self.master.title("File & Folder Viewer - LLM Context Token Counter")
-        self.master.geometry("900x600")
+        self.master.geometry("1000x700")
         
         # Base directory: using pathlib to get the directory where this file is located.
         self.base_path: Path = Path(__file__).resolve().parent
         self.current_path: Path = self.base_path
+        
+        # Threading and task management
+        self.task_queue = Queue()
+        self.is_processing = False
+        self.cancel_processing = False
+        
+        # Cache for directory listings and file contents
+        self.dir_cache: Dict[Path, List[Path]] = {}
+        self.file_content_cache: Dict[Path, str] = {}
+        self.max_cache_size = 50  # Maximum number of files to cache
         
         # Language translations
         self.translations: Dict[str, Dict[str, str]] = {
@@ -56,7 +109,9 @@ class FileExplorer:
                 "root_dir_error": "Cannot go outside root directory.",
                 "save_success": "'llm.txt' file saved:\n",
                 "save_error": "File could not be saved: ",
-                "list_error": "Directory content could not be listed: "
+                "list_error": "Directory content could not be listed: ",
+                "processing": "Processing...",
+                "cancel": "Cancel"
             },
             "TR": {
                 "title": "Dosya & Klasör Görüntüleyici - LLM Context Token Sayacı",
@@ -75,7 +130,9 @@ class FileExplorer:
                 "root_dir_error": "Kök dizinin dışına çıkamazsınız.",
                 "save_success": "'llm.txt' dosyası kaydedildi:\n",
                 "save_error": "Dosya kaydedilemedi: ",
-                "list_error": "Dizin içeriği listelenemedi: "
+                "list_error": "Dizin içeriği listelenemedi: ",
+                "processing": "İşleniyor...",
+                "cancel": "İptal"
             },
             "RU": {
                 "title": "Просмотрщик файлов и папок - Счетчик токенов LLM Context",
@@ -94,7 +151,9 @@ class FileExplorer:
                 "root_dir_error": "Нельзя выйти за пределы корневого каталога.",
                 "save_success": "Файл 'llm.txt' сохранен:\n",
                 "save_error": "Не удалось сохранить файл: ",
-                "list_error": "Не удалось получить содержимое каталога: "
+                "list_error": "Не удалось получить содержимое каталога: ",
+                "processing": "Обработка...",
+                "cancel": "Отмена"
             }
         }
         
@@ -103,22 +162,34 @@ class FileExplorer:
         
         # Listen for language changes
         self.language_var.trace_add("write", self.on_language_change)
+        
+        # Start the task processing thread
+        self.process_tasks_thread = threading.Thread(target=self.process_tasks, daemon=True)
+        self.process_tasks_thread.start()
     
     def setup_ui(self) -> None:
         """Setup the user interface."""
+        # Configure style
+        style = ttk.Style()
+        style.configure("TFrame", background="#f0f0f0")
+        style.configure("TButton", padding=5, font=("Arial", 9))
+        style.configure("TLabel", background="#f0f0f0", font=("Arial", 10))
+        style.configure("Header.TLabel", font=("Arial", 12, "bold"))
+        style.configure("Directory.TLabel", font=("Arial", 10, "italic"))
+        
         # Create main panels using PanedWindow (left: list, right: content)
         self.paned: ttk.PanedWindow = ttk.PanedWindow(self.master, orient=tk.HORIZONTAL)
-        self.paned.pack(fill=tk.BOTH, expand=True)
+        self.paned.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         
         # LEFT PANEL: Area listing directory contents and navigation buttons
-        self.left_frame: ttk.Frame = ttk.Frame(self.paned, padding=10)
+        self.left_frame: ttk.Frame = ttk.Frame(self.paned, padding=10, style="TFrame")
         self.paned.add(self.left_frame, weight=1)
         
-        header_frame: ttk.Frame = ttk.Frame(self.left_frame)
+        header_frame: ttk.Frame = ttk.Frame(self.left_frame, style="TFrame")
         header_frame.pack(fill=tk.X)
         
         self.left_label: ttk.Label = ttk.Label(
-            header_frame, text=self.translations["EN"]["directory_content"], font=("Arial", 12, "bold")
+            header_frame, text=self.translations["EN"]["directory_content"], style="Header.TLabel"
         )
         self.left_label.pack(side=tk.LEFT, anchor="w")
         
@@ -127,25 +198,46 @@ class FileExplorer:
         )
         self.up_button.pack(side=tk.RIGHT)
         
-        self.current_path_label: ttk.Label = ttk.Label(self.left_frame, text="", font=("Arial", 10))
+        self.current_path_label: ttk.Label = ttk.Label(
+            self.left_frame, text="", style="Directory.TLabel"
+        )
         self.current_path_label.pack(anchor="w", pady=(5, 5))
         
-        self.list_frame: ttk.Frame = ttk.Frame(self.left_frame)
+        # Search entry
+        search_frame = ttk.Frame(self.left_frame, style="TFrame")
+        search_frame.pack(fill=tk.X, pady=(0, 5))
+        
+        self.search_var = tk.StringVar()
+        self.search_var.trace_add("write", self.on_search_change)
+        
+        search_entry = ttk.Entry(search_frame, textvariable=self.search_var)
+        search_entry.pack(fill=tk.X)
+        
+        # Directory listing with custom visualization
+        self.list_frame: ttk.Frame = ttk.Frame(self.left_frame, style="TFrame")
         self.list_frame.pack(fill=tk.BOTH, expand=True)
         
-        self.listbox: tk.Listbox = tk.Listbox(self.list_frame, selectmode=tk.EXTENDED, font=("Consolas", 10))
-        self.listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        # Use Treeview instead of Listbox for better visualization
+        self.tree = ttk.Treeview(self.list_frame, columns=("type", "size"), show="tree headings", selectmode="extended")
+        self.tree.heading("#0", text="Name")
+        self.tree.heading("type", text="Type")
+        self.tree.heading("size", text="Size")
+        self.tree.column("#0", width=200, stretch=True)
+        self.tree.column("type", width=80, stretch=False)
+        self.tree.column("size", width=80, anchor="e", stretch=False)
         
-        self.list_scrollbar: ttk.Scrollbar = ttk.Scrollbar(self.list_frame, orient=tk.VERTICAL, command=self.listbox.yview)
+        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        self.list_scrollbar: ttk.Scrollbar = ttk.Scrollbar(self.list_frame, orient=tk.VERTICAL, command=self.tree.yview)
         self.list_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        self.listbox.config(yscrollcommand=self.list_scrollbar.set)
+        self.tree.config(yscrollcommand=self.list_scrollbar.set)
         
-        # Bind selection and double-click events to the listbox
-        self.listbox.bind("<<ListboxSelect>>", self.on_select)
-        self.listbox.bind("<Double-Button-1>", self.on_item_double_click)
+        # Bind selection and double-click events to the tree
+        self.tree.bind("<<TreeviewSelect>>", self.on_select)
+        self.tree.bind("<Double-1>", self.on_item_double_click)
         
         # Additional selection control buttons
-        self.left_button_frame: ttk.Frame = ttk.Frame(self.left_frame)
+        self.left_button_frame: ttk.Frame = ttk.Frame(self.left_frame, style="TFrame")
         self.left_button_frame.pack(fill=tk.X, pady=(5, 0))
         
         self.select_all_button: ttk.Button = ttk.Button(
@@ -159,17 +251,33 @@ class FileExplorer:
         self.clear_selection_button.pack(side=tk.LEFT)
         
         # RIGHT PANEL: Displays the source code in Markdown format and the LLM context token count
-        self.right_frame: ttk.Frame = ttk.Frame(self.paned, padding=10)
+        self.right_frame: ttk.Frame = ttk.Frame(self.paned, padding=10, style="TFrame")
         self.paned.add(self.right_frame, weight=3)
         
         # Top section: Layout for the header area of the right panel using grid
-        top_right_frame: ttk.Frame = ttk.Frame(self.right_frame)
+        top_right_frame: ttk.Frame = ttk.Frame(self.right_frame, style="TFrame")
         top_right_frame.pack(fill=tk.X)
         
         self.right_label: ttk.Label = ttk.Label(
-            top_right_frame, text=self.translations["EN"]["source_code"], font=("Arial", 12, "bold")
+            top_right_frame, text=self.translations["EN"]["source_code"], style="Header.TLabel"
         )
         self.right_label.grid(row=0, column=0, sticky="w")
+        
+        # Progress indicator and cancel button for long operations
+        self.progress_frame = ttk.Frame(top_right_frame, style="TFrame")
+        self.progress_frame.grid(row=0, column=1, sticky="e")
+        
+        self.progress_label = ttk.Label(self.progress_frame, text="", style="TLabel")
+        self.progress_label.pack(side=tk.LEFT, padx=(0, 5))
+        
+        self.cancel_button = ttk.Button(
+            self.progress_frame, text=self.translations["EN"]["cancel"], 
+            command=self.cancel_current_task, state=tk.DISABLED
+        )
+        self.cancel_button.pack(side=tk.LEFT)
+        
+        # Hide progress frame initially
+        self.progress_frame.grid_remove()
         
         # Language mode select box in the top right corner (default "EN", options: EN, TR, RU)
         self.language_var: tk.StringVar = tk.StringVar(value="EN")
@@ -185,13 +293,36 @@ class FileExplorer:
         
         top_right_frame.columnconfigure(1, weight=1)
         
-        # Text widget for Markdown source code
-        self.text: tk.Text = tk.Text(self.right_frame, wrap=tk.NONE, font=("Consolas", 10))
-        self.text.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        # Text widget with syntax highlighting for Markdown source code
+        self.text_frame = ttk.Frame(self.right_frame, style="TFrame")
+        self.text_frame.pack(fill=tk.BOTH, expand=True)
         
-        self.text_scrollbar: ttk.Scrollbar = ttk.Scrollbar(self.right_frame, orient=tk.VERTICAL, command=self.text.yview)
-        self.text_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        self.text.config(yscrollcommand=self.text_scrollbar.set)
+        self.text: tk.Text = tk.Text(
+            self.text_frame, wrap=tk.NONE, font=("Consolas", 10), 
+            bg="#ffffff", fg="#000000", insertbackground="#000000",
+            selectbackground="#c0c0c0", selectforeground="#000000"
+        )
+        self.text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        self.text_scrollbar_y: ttk.Scrollbar = ttk.Scrollbar(
+            self.text_frame, orient=tk.VERTICAL, command=self.text.yview
+        )
+        self.text_scrollbar_y.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        self.text_scrollbar_x: ttk.Scrollbar = ttk.Scrollbar(
+            self.right_frame, orient=tk.HORIZONTAL, command=self.text.xview
+        )
+        self.text_scrollbar_x.pack(side=tk.BOTTOM, fill=tk.X)
+        
+        self.text.config(
+            yscrollcommand=self.text_scrollbar_y.set,
+            xscrollcommand=self.text_scrollbar_x.set
+        )
+        
+        # Configure text tags for syntax highlighting
+        self.text.tag_configure("header", foreground="#0000ff", font=("Consolas", 12, "bold"))
+        self.text.tag_configure("code_block", foreground="#008000")
+        self.text.tag_configure("code_marker", foreground="#800080")
         
         # Bottom frame for token count label so it is not hidden by the text widget
         self.bottom_frame: tk.Frame = tk.Frame(self.right_frame, bg="#222222")
@@ -220,20 +351,70 @@ class FileExplorer:
         self.clear_selection_button.config(text=self.translations[lang]["clear_selection"])
         self.right_label.config(text=self.translations[lang]["source_code"])
         self.save_button.config(text=self.translations[lang]["save"])
+        self.cancel_button.config(text=self.translations[lang]["cancel"])
         self.token_count_label.config(
             text=self.translations[lang]["total_tokens"] + str(count_tokens(self.text.get("1.0", tk.END)))
         )
         self.populate_listbox()  # Update the current directory label
     
+    def on_search_change(self, *args: Any) -> None:
+        """Filter the listbox content based on search term"""
+        self.populate_listbox()
+    
+    def get_file_size_str(self, size_bytes: int) -> str:
+        """Convert file size in bytes to a human-readable string"""
+        for unit in ['B', 'KB', 'MB', 'GB']:
+            if size_bytes < 1024.0 or unit == 'GB':
+                return f"{size_bytes:.1f} {unit}" if unit != 'B' else f"{size_bytes} {unit}"
+            size_bytes /= 1024.0
+        return f"{size_bytes:.1f} GB"
+    
     def populate_listbox(self) -> None:
         """
         List files and folders in the current directory in alphabetical order.
+        Implements search filtering and caching for better performance.
         """
         try:
-            items = sorted([p.name for p in self.current_path.iterdir()], key=lambda s: s.lower())
-            self.listbox.delete(0, tk.END)
-            for item in items:
-                self.listbox.insert(tk.END, item)
+            # Clear the tree
+            for item in self.tree.get_children():
+                self.tree.delete(item)
+                
+            # Get items from cache or directory
+            if self.current_path in self.dir_cache:
+                items = self.dir_cache[self.current_path]
+            else:
+                items = list(self.current_path.iterdir())
+                self.dir_cache[self.current_path] = items
+                
+            # Sort items (folders first, then files)
+            folders = sorted([p for p in items if p.is_dir()], key=lambda p: p.name.lower())
+            files = sorted([p for p in items if p.is_file()], key=lambda p: p.name.lower())
+            
+            # Filter by search term if provided
+            search_term = self.search_var.get().lower()
+            if search_term:
+                folders = [f for f in folders if search_term in f.name.lower()]
+                files = [f for f in files if search_term in f.name.lower()]
+            
+            # Add folders to tree
+            for folder in folders:
+                folder_size = sum(f.stat().st_size for f in folder.glob('**/*') if f.is_file())
+                self.tree.insert("", "end", iid=str(folder), text=folder.name, 
+                                values=("Folder", self.get_file_size_str(folder_size)))
+                
+            # Add files to tree
+            for file in files:
+                try:
+                    size = file.stat().st_size
+                    # Determine file type based on extension
+                    ext = file.suffix.lower()
+                    file_type = ext[1:].upper() if ext else "File"
+                    self.tree.insert("", "end", iid=str(file), text=file.name, 
+                                    values=(file_type, self.get_file_size_str(size)))
+                except Exception:
+                    self.tree.insert("", "end", iid=str(file), text=file.name, 
+                                    values=("Error", "Unknown"))
+            
             # Get the relative current path with respect to the base directory
             try:
                 rel_current = str(self.current_path.relative_to(self.base_path))
@@ -251,12 +432,83 @@ class FileExplorer:
             lang = self.language_var.get()
             messagebox.showerror("Error", f"{self.translations[lang]['list_error']}{e}")
     
-    def get_markdown_for_path(self, path: Path) -> str:
+    def read_file_content(self, path: Path) -> str:
+        """Read file content with caching for better performance"""
+        if path in self.file_content_cache:
+            return self.file_content_cache[path]
+        
+        try:
+            content = path.read_text(encoding="utf-8")
+            
+            # Cache the content (with size management)
+            if len(self.file_content_cache) >= self.max_cache_size:
+                # Remove the first item (least recently added)
+                self.file_content_cache.pop(next(iter(self.file_content_cache)))
+            self.file_content_cache[path] = content
+            
+            return content
+        except Exception as e:
+            lang = self.language_var.get()
+            return f"{self.translations[lang]['file_read_error']}{e}"
+    
+    def process_tasks(self) -> None:
+        """Process tasks from the queue in a background thread"""
+        while True:
+            try:
+                task = self.task_queue.get()
+                if task:
+                    func, args, callback = task
+                    self.is_processing = True
+                    self.cancel_processing = False
+                    
+                    # Execute task
+                    result = func(*args)
+                    
+                    # Check if processing was cancelled
+                    if not self.cancel_processing and callback:
+                        # Schedule callback to run in the main thread
+                        self.master.after(0, lambda: callback(result))
+                    
+                    self.is_processing = False
+                    self.task_queue.task_done()
+                    
+                    # Hide progress indicator when all tasks are done
+                    if self.task_queue.empty():
+                        self.master.after(0, self.hide_progress)
+            except Exception as e:
+                print(f"Error in task processing: {e}")
+            
+            # Small delay to prevent CPU hogging
+            time.sleep(0.01)
+    
+    def show_progress(self) -> None:
+        """Show progress indicator for long operations"""
+        lang = self.language_var.get()
+        self.progress_label.config(text=self.translations[lang]["processing"])
+        self.progress_frame.grid()
+        self.cancel_button.config(state=tk.NORMAL)
+    
+    def hide_progress(self) -> None:
+        """Hide progress indicator when operation completes"""
+        self.progress_frame.grid_remove()
+        self.cancel_button.config(state=tk.DISABLED)
+    
+    def cancel_current_task(self) -> None:
+        """Cancel the currently running task"""
+        self.cancel_processing = True
+    
+    def get_markdown_for_path(self, path: Path, max_depth: int = 3, current_depth: int = 0) -> str:
         """
         Generate Markdown content for the given file or folder path.
-          - File: Uses the relative path as a header and includes its content inside a code block.
-          - Folder: Uses the folder name as a header and recursively includes all files/folders inside.
+        - File: Uses the relative path as a header and includes its content inside a code block.
+        - Folder: Uses the folder name as a header and recursively includes all files/folders inside.
+        
+        Implements depth limiting to prevent excessive recursion for large directories.
         """
+        # Check for cancellation request
+        if self.cancel_processing:
+            return "Operation cancelled"
+            
         try:
             rel_path = path.relative_to(self.base_path)
         except ValueError:
@@ -265,52 +517,139 @@ class FileExplorer:
         lang: str = self.language_var.get()
         
         if path.is_file():
-            try:
-                content: str = path.read_text(encoding="utf-8")
-            except Exception as e:
-                content = f"{self.translations[lang]['file_read_error']}{e}"
-            markdown_str: str = f"## {display_path}\n\n```python\n{content}\n```\n\n"
+            content = self.read_file_content(path)
+            # Get file extension
+            ext = path.suffix.lower()[1:] if path.suffix else "text"
+            markdown_str: str = f"## {display_path}\n\n```{ext}\n{content}\n```\n\n"
             return markdown_str
         elif path.is_dir():
             markdown_str: str = f"## {display_path} ({self.translations[lang]['folder']})\n\n"
+            
+            # Stop recursion if we've reached the maximum depth
+            if current_depth >= max_depth:
+                markdown_str += f"*Directory content not shown due to depth limit ({max_depth})*\n\n"
+                return markdown_str
+                
             try:
-                for item in sorted(path.iterdir(), key=lambda p: p.name.lower()):
-                    markdown_str += self.get_markdown_for_path(item)
+                # Get directory items from cache if available
+                if path in self.dir_cache:
+                    items = self.dir_cache[path]
+                else:
+                    items = list(path.iterdir())
+                    self.dir_cache[path] = items
+                
+                # Process folders first, then files
+                folders = sorted([p for p in items if p.is_dir()], key=lambda p: p.name.lower())
+                files = sorted([p for p in items if p.is_file()], key=lambda p: p.name.lower())
+                
+                # Process folders
+                for item in folders:
+                    markdown_str += self.get_markdown_for_path(item, max_depth, current_depth + 1)
+                
+                # Process files
+                for item in files:
+                    markdown_str += self.get_markdown_for_path(item, max_depth, current_depth + 1)
+                    
             except Exception as e:
                 markdown_str += f"{self.translations[lang]['folder_read_error']}{e}\n\n"
             return markdown_str
         else:
             return ""
     
+    def process_selection(self, selections: List[str]) -> None:
+        """Process the selected items and update the text widget with markdown content"""
+        # Show progress indicator
+        self.show_progress()
+        
+        def generate_markdown(selections):
+            full_markdown = ""
+            for item_id in selections:
+                full_path = Path(item_id)
+                markdown = self.get_markdown_for_path(full_path)
+                if self.cancel_processing:
+                    return "Operation cancelled."
+                full_markdown += markdown
+            return full_markdown
+        
+        def update_text(markdown):
+            self.text.delete("1.0", tk.END)
+            if markdown:
+                self.text.insert(tk.END, markdown)
+                self.highlight_markdown()
+            self.update_token_count()
+        
+        # Add the task to the queue
+        self.task_queue.put((generate_markdown, (selections,), update_text))
+    
+    def highlight_markdown(self) -> None:
+        """Apply syntax highlighting to the markdown text"""
+        content = self.text.get("1.0", tk.END)
+        
+        # Clear existing tags
+        for tag in ["header", "code_block", "code_marker"]:
+            self.text.tag_remove(tag, "1.0", tk.END)
+        
+        # Highlight headers (## text)
+        pos = "1.0"
+        while True:
+            header_start = self.text.search("^## ", pos, tk.END, regexp=True)
+            if not header_start:
+                break
+            header_end = self.text.search("\n", header_start, tk.END)
+            if not header_end:
+                header_end = tk.END
+            self.text.tag_add("header", header_start, header_end)
+            pos = header_end
+        
+        # Highlight code blocks
+        pos = "1.0"
+        in_code_block = False
+        start_pos = None
+        
+        while True:
+            marker_pos = self.text.search("```", pos, tk.END)
+            if not marker_pos:
+                break
+                
+            marker_end = f"{marker_pos}+3c"
+            
+            # Add tag for the code marker itself
+            self.text.tag_add("code_marker", marker_pos, marker_end)
+            
+            if not in_code_block:
+                # Start of code block
+                start_pos = marker_end
+                in_code_block = True
+            else:
+                # End of code block
+                self.text.tag_add("code_block", start_pos, marker_pos)
+                in_code_block = False
+                
+            pos = marker_end
+    
     def on_select(self, event: Any) -> None:
         """
-        When an item is selected in the listbox, insert the Markdown content 
+        When an item is selected in the tree, insert the Markdown content 
         of the selected file(s) or folder(s) into the Text widget.
+        Uses threading to prevent UI freezing for large files/folders.
         """
-        widget = getattr(event, "widget", self.listbox)
-        selections = widget.curselection()
-        self.text.delete("1.0", tk.END)
+        selections = self.tree.selection()
         if not selections:
+            self.text.delete("1.0", tk.END)
             self.update_token_count()
             return
-        full_markdown: str = ""
-        for index in selections:
-            item_name: str = self.listbox.get(index)
-            full_path: Path = self.current_path / item_name
-            full_markdown += self.get_markdown_for_path(full_path)
-        self.text.insert(tk.END, full_markdown)
-        self.update_token_count()
+            
+        self.process_selection(selections)
     
     def on_item_double_click(self, event: Any) -> None:
         """
-        If a folder is double-clicked in the listbox, navigate into that folder.
+        If a folder is double-clicked in the tree, navigate into that folder.
         """
-        selection = self.listbox.curselection()
+        selection = self.tree.selection()
         if not selection:
             return
-        index: int = selection[0]
-        item_name: str = self.listbox.get(index)
-        full_path: Path = self.current_path / item_name
+        item_id = selection[0]
+        full_path = Path(item_id)
         if full_path.is_dir():
             self.current_path = full_path
             self.populate_listbox()
@@ -337,16 +676,14 @@ class FileExplorer:
         self.update_token_count()
     
     def select_all(self) -> None:
-        """Select all items in the listbox."""
-        self.listbox.select_set(0, tk.END)
-        # Create a dummy event object with a 'widget' attribute set to self.listbox.
-        dummy_event = type("DummyEvent", (), {})()
-        dummy_event.widget = self.listbox
-        self.on_select(dummy_event)
+        """Select all items in the tree."""
+        for item in self.tree.get_children():
+            self.tree.selection_add(item)
+        self.on_select(None)
     
     def clear_selection(self) -> None:
-        """Clear the selection in the listbox and clear the Text widget."""
-        self.listbox.select_clear(0, tk.END)
+        """Clear the selection in the tree and clear the Text widget."""
+        self.tree.selection_remove(self.tree.selection())
         self.text.delete("1.0", tk.END)
         self.update_token_count()
     
@@ -364,9 +701,20 @@ class FileExplorer:
     def update_token_count(self) -> None:
         """Calculate the token count of the text and update the token count label."""
         content: str = self.text.get("1.0", tk.END)
-        token_count: int = count_tokens(content)
-        lang: str = self.language_var.get()
-        self.token_count_label.config(text=f"{self.translations[lang]['total_tokens']}{token_count}")
+        
+        # Use a background thread for token counting of large texts
+        def count_in_background(text):
+            return count_tokens(text)
+            
+        def update_label(count):
+            lang: str = self.language_var.get()
+            self.token_count_label.config(text=f"{self.translations[lang]['total_tokens']}{count}")
+            
+        # For very small texts, count directly to avoid the overhead of creating a thread
+        if len(content) < 10000:
+            update_label(count_tokens(content))
+        else:
+            self.task_queue.put((count_in_background, (content,), update_label))
     
     def on_text_modified(self, event: Any) -> None:
         """
@@ -381,10 +729,18 @@ class FileExplorer:
 def main() -> None:
     """Main function to run the File Explorer application."""
     root: tk.Tk = tk.Tk()
-    # Set the overall window transparency to 95%
-    root.attributes("-alpha", 0.95)
+    # Set the overall window transparency to 97%
+    root.attributes("-alpha", 0.97)
+    
+    # Configure ttk style
     style: ttk.Style = ttk.Style(root)
     style.theme_use("clam")
+    
+    # Configure colors
+    style.configure(".", background="#f0f0f0", foreground="#000000")
+    style.configure("Treeview", background="#ffffff", fieldbackground="#ffffff", foreground="#000000")
+    style.map("Treeview", background=[("selected", "#4a6984")], foreground=[("selected", "#ffffff")])
+    
     app = FileExplorer(root)
     root.mainloop()
 
