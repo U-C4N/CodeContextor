@@ -1,17 +1,22 @@
 """
-Core package for CodeContextor.
-Contains fundamental utilities and constants.
+Core module for CodeContextor.
+
+This module contains the essential functionality for file handling,
+token counting, caching, and utility functions.
 """
 
-from .constants import *
-from .utils import *
-from .token_counter import *
-from .cache_manager import *
-from .file_handler import *
+from .constants import IGNORE_PATTERNS, IGNORE_EXTENSIONS, should_ignore_path
+from .token_counter import count_tokens
+from .file_handler import FileHandler
+from .cache_manager import CacheManager
+from .utils import threaded
 
 __all__ = [
-    'IGNORE_PATTERNS', 'IGNORE_EXTENSIONS',
-    'should_ignore_path', 'threaded',
-    'count_tokens', 'token_cache', 'cache_timestamps',
-    'CacheManager', 'FileHandler'
+    'IGNORE_PATTERNS',
+    'IGNORE_EXTENSIONS', 
+    'should_ignore_path',
+    'count_tokens',
+    'FileHandler',
+    'CacheManager',
+    'threaded'
 ] 

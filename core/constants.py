@@ -1,10 +1,15 @@
 """
-Constants and configuration for CodeContextor.
-Contains ignore patterns and other global settings.
+Constants and ignore patterns for CodeContextor.
+
+This module defines the patterns and extensions that should be ignored
+when scanning directories for source code files.
 """
 
+from pathlib import Path
+from typing import Set
+
 # Ignore patterns for cache/build directories and files
-IGNORE_PATTERNS = {
+IGNORE_PATTERNS: Set[str] = {
     # Directories to ignore completely
     'node_modules', '__pycache__', '.next', '.cache', '.git', '.vscode', '.vs', 
     'dist', 'build', 'out', '.nuxt', '.vitepress', '.svelte-kit', 'target', 
@@ -20,20 +25,25 @@ IGNORE_PATTERNS = {
 }
 
 # File extensions to ignore
-IGNORE_EXTENSIONS = {
+IGNORE_EXTENSIONS: Set[str] = {
     '.log', '.tmp', '.temp', '.bak', '.backup', '.swp', '.swo', '.orig',
     '.rej', '.patch', '.pyc', '.pyo', '.pyd', '.so', '.dll', '.dylib',
     '.exe', '.msi', '.dmg', '.pkg', '.deb', '.rpm', '.tar.gz', '.zip',
     '.rar', '.7z', '.iso', '.img', '.bin', '.dat', '.dump', '.lock'
 }
 
-# Cache settings
-MAX_CACHE_SIZE = 200
-CACHE_TTL = 300  # 5 minutes
-MAX_FILE_CACHE_SIZE = 50
-
-# UI settings
-DEFAULT_WINDOW_WIDTH = 1200
-DEFAULT_WINDOW_HEIGHT = 800
-MIN_WINDOW_WIDTH = 800
-MIN_WINDOW_HEIGHT = 600 
+def should_ignore_path(path: Path) -> bool:
+    """Check if a path should be ignored based on ignore patterns."""
+    # Check if it's a directory with ignored name
+    if path.is_dir() and path.name.lower() in IGNORE_PATTERNS:
+        return True
+    
+    # Check if it's a file with ignored extension
+    if path.is_file() and path.suffix.lower() in IGNORE_EXTENSIONS:
+        return True
+    
+    # Check if it's a hidden file (starts with .) except for some common ones
+    if path.name.startswith('.') and path.name not in {'.gitignore', '.env.example', '.env.template', '.editorconfig', '.dockerignore', '.htaccess'}:
+        return True
+        
+    return False 

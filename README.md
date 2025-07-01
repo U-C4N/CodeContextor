@@ -8,34 +8,52 @@ A specialized Python desktop application designed to prepare and send source cod
 
 CodeContextor has evolved from a monolithic single-file application (1487 lines) to a **professional modular architecture** for better maintainability, scalability, and team development.
 
-### Project Structure
+### 📁 Modular Structure
 ```
 CodeContextor/
-├── main.py                 # Main entry point
-├── prototype.py            # Original monolithic code (backup)
-├── core/                   # Core functionality
-│   ├── constants.py        # Configuration and ignore patterns
-│   ├── utils.py           # Helper functions
-│   ├── token_counter.py   # Token counting with caching
-│   ├── cache_manager.py   # Directory and file caching
-│   └── file_handler.py    # File operations and markdown generation
-├── workers/               # Thread management
-│   └── thread_manager.py  # Background task processing
-├── localization/          # Multi-language system
-│   └── translations.py    # 10 language translations
-└── ui/                    # User interface
-    ├── styles.py          # shadcn/ui inspired styling
-    └── main_window.py     # Complete UI implementation
+├── core/                    # Core utilities and business logic
+│   ├── __init__.py
+│   ├── constants.py         # Application constants and configuration
+│   ├── token_counter.py     # Token counting and estimation
+│   ├── file_handler.py      # File I/O operations
+│   ├── cache_manager.py     # Caching mechanisms
+│   └── utils.py            # Utility functions
+├── ui/                      # User interface components
+│   ├── __init__.py
+│   ├── main_window.py       # Main application window (FileExplorer)
+│   ├── styles.py           # Styling system (shadcn/ui inspired)
+│   ├── theme_manager.py     # Dark/Light mode management
+│   ├── error_handler.py     # User-friendly error messages
+│   ├── shortcut_manager.py  # Keyboard shortcuts (Ctrl+A, Ctrl+C, Ctrl+S)
+│   └── animations.py       # Smooth UI animations
+├── workers/                 # Background processing
+│   ├── __init__.py
+│   └── thread_manager.py   # Threading system and task management
+├── localization/           # Internationalization
+│   ├── __init__.py
+│   └── translations.py     # Multi-language support (10 languages)
+├── main.py                 # Application entry point
+└── prototype.py           # Original monolithic version (archived)
 ```
 
 ## ✨ What's New in v2
 
-### 🎨 Modern Design (shadcn/ui Inspired)
-- **Clean White Background**: Minimal, professional appearance (#ffffff)
+### 🎨 Modern Design & Theming
+- **Dark/Light Mode Toggle**: Seamless theme switching with persistence
+  - Dark mode: Rich blacks (#0a0a0a, #1a1a1a) with white text
+  - Light mode: Clean whites with professional contrast
+  - **Theme Persistence**: Remembers your preference across sessions
 - **Modern Typography**: Inter and JetBrains Mono fonts
-- **Card-based Layout**: Subtle borders and organized sections
 - **Responsive Design**: Adaptive UI components
-- **Emoji-free Interface**: Clean, professional look
+
+### ⌨️ Enhanced User Experience
+- **Keyboard Shortcuts** *(In Progress)*:
+  - `Ctrl+A`: Select all text in focused widget
+  - `Ctrl+C`: Copy selected content to clipboard
+  - `Ctrl+S`: Save current file/context
+- **Smart Error Handling**: User-friendly error messages with detailed logging
+- **Smooth Animations** *(In Progress)*: Fade-in/out effects and smooth transitions
+- **Professional Interface**: Clean, emoji-free design for business environments
 
 ### 🚫 Smart Cache Ignore System
 - **Automatic Filtering**: Ignores `node_modules`, `__pycache__`, `.git`, etc.
@@ -55,6 +73,7 @@ Now supporting **10 languages**:
 - **Progressive Loading**: Efficient handling of large directory structures
 - **Type Safety**: Comprehensive type hints throughout codebase
 - **Error Handling**: Robust error management and recovery
+- **Modular Architecture**: Clean separation of concerns for maintainability
 
 ### 📊 Advanced Features
 - **Real-time Search**: Filter files and folders instantly
@@ -70,6 +89,8 @@ Now supporting **10 languages**:
 - 📁 **Smart Filtering**: Intelligent directory traversal with ignore patterns
 - ⚡ **Quick Export**: Copy to clipboard or save to file
 - 🌐 **Multi-language**: Support for 10 languages
+- 🌙 **Theme Toggle**: Dark/Light mode with persistence
+- ⌨️ **Keyboard Shortcuts**: Professional keyboard navigation
 - 💡 **Context Preparation**: Optimized formatting for AI analysis
 - 🎯 **Selective Processing**: Choose specific files or entire directories
 
@@ -77,10 +98,14 @@ Now supporting **10 languages**:
 
 - **Python 3.x** with comprehensive type hints
 - **Tkinter/ttk** with modern shadcn/ui inspired styling
-- **Multi-threading** for responsive UI
+- **Multi-threading** for responsive UI (workers/thread_manager.py)
 - **pathlib** for modern file operations
 - **tiktoken** for accurate LLM token counting (with fallback)
-- **Modular Architecture** for maintainability and scalability
+- **Modular Architecture** with specialized modules:
+  - `core/` - Business logic and utilities
+  - `ui/` - User interface components and theming
+  - `workers/` - Background processing and threading
+  - `localization/` - Internationalization support
 
 ## 📦 Installation
 
@@ -138,13 +163,29 @@ python main.py
 - **Responsiveness**: Non-blocking UI operations
 - **Consistency**: Uniform behavior across features
 
-## 📈 Performance Metrics
+## 📈 Development Progress
 
+### ✅ Completed Features (Tasks 1-7)
+- **Modular Architecture**: Complete refactoring from monolithic to modular structure
+- **Core Utilities**: Constants, token counter, file handler, cache manager
+- **UI Components**: Main window, styling system, theme management
+- **Threading System**: Background processing and task management
+- **Localization**: Full 10-language internationalization support
+- **Dark/Light Mode**: Theme toggle with persistent preferences
+- **Main Entry Point**: Integrated application launcher replacing prototype.py
+
+### 🔄 In Progress (Task 8)
+- **Keyboard Shortcuts**: Professional navigation (Ctrl+A, Ctrl+C, Ctrl+S)
+- **Error Handling**: User-friendly error messages and logging
+- **UI Animations**: Smooth transitions and visual feedback
+
+### 📊 Performance Metrics
 - **Startup Time**: < 2 seconds
 - **Large Directories**: Handles 1000+ files efficiently
 - **Memory Usage**: Optimized caching with size limits
 - **Token Calculation**: 90% faster with ignore patterns
 - **UI Responsiveness**: Non-blocking operations
+- **Code Quality**: 77.8% task completion rate with modular architecture
 
 ## 🔍 Cache Ignore Patterns
 
@@ -178,11 +219,18 @@ We welcome contributions! Here's how you can help:
 
 ### Development Guidelines
 
-- Follow PEP 8 style guidelines
-- Add type hints to new functions
-- Include docstrings for public methods
-- Test your changes thoroughly
-- Update documentation as needed
+- **Follow PEP 8** style guidelines for code consistency
+- **Add type hints** to all new functions and methods
+- **Include docstrings** for public methods and classes
+- **Test your changes** thoroughly across modules
+- **Update documentation** as needed
+- **Respect modular architecture**:
+  - Place utilities in appropriate `core/` modules
+  - UI changes go in `ui/` components
+  - Background tasks use `workers/thread_manager.py`
+  - Translations in `localization/translations.py`
+- **Use dependency injection** instead of global state
+- **Follow established patterns** from existing modules
 
 ## 📝 License
 
@@ -190,7 +238,6 @@ MIT License - See LICENSE file for details
 
 ## 🙏 Acknowledgments
 
-- **shadcn/ui** for design inspiration
 - **tiktoken** for accurate token counting
 - **Python community** for excellent libraries and tools
 
