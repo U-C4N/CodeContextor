@@ -1,12 +1,40 @@
 # CodeContextor Portable
 
-![CodeContextor Interface](img.jpg)
+## 🖼️ Application Views
+
+### Modern Interface (Current Version)
+![CodeContextor Main Interface](main.jpg)
+
+*The current modular version featuring dark/light theme toggle, modern typography, and professional UI design with enhanced file browsing capabilities.*
+
+### Original Prototype Interface
+![CodeContextor Prototype](prototype.jpg)
+
+*The original monolithic prototype version (archived as prototype.py) showcasing the initial concept and functionality.*
+
+## 📝 Overview
 
 A specialized Python desktop application designed to prepare and send source code to LLM chats. CodeContextor helps developers scan project directories, calculate token usage, and format entire codebases for AI analysis and modifications.
 
 ## 🏗️ Architecture & Modularization
 
 CodeContextor has evolved from a monolithic single-file application (1487 lines) to a **professional modular architecture** for better maintainability, scalability, and team development.
+
+### 🔄 Evolution: Prototype → Main Version
+
+**Prototype Version (prototype.py)**
+- **Single file**: All functionality in one 1487-line Python file
+- **Basic UI**: Simple tkinter interface with minimal styling
+- **Limited features**: Core scanning and token counting only
+- **Monolithic**: All components tightly coupled
+- **Basic theme**: Single color scheme
+
+**Main Version (main.py + modular structure)**
+- **Modular architecture**: Organized into specialized modules (core/, ui/, workers/, localization/)
+- **Modern UI**: Professional interface with shadcn/ui inspired design
+- **Rich features**: Dark/light themes, animations, keyboard shortcuts, multi-language support
+- **Separation of concerns**: Clear boundaries between UI, business logic, and data handling
+- **Enhanced UX**: Error handling, progress indicators, caching, and performance optimizations
 
 ### 📁 Modular Structure
 ```
