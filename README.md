@@ -1,4 +1,4 @@
-# CodeContextor Portable
+# CodeContextor Portable v1.4
 
 ## 🖼️ Application Views
 
@@ -64,7 +64,14 @@ CodeContextor/
 └── prototype.py           # Original monolithic version (archived)
 ```
 
-## ✨ What's New in v2
+## ✨ What's New in v1.4
+
+### 📋 Header Menu System
+- **File Menu**: Quick folder navigation with "Select Folder..." option (Ctrl+O)
+- **Version Menu**: Displays current version (v1.4) and About dialog
+- **Keyboard Shortcuts**: Professional navigation with Ctrl+O and Ctrl+Q
+- **Multi-language Menu**: All menu items translate automatically to 10 languages
+- **Folder Selection Dialog**: Browse and navigate to any directory instantly
 
 ### 🎨 Modern Design & Theming
 - **Dark/Light Mode Toggle**: Seamless theme switching with persistence
@@ -271,4 +278,4 @@ MIT License - See LICENSE file for details
 
 ---
 
-**CodeContextor Portable** - Professional, modular, and user-friendly tool for LLM context preparation. 
+**CodeContextor Portable v1.4** - Professional, modular, and user-friendly tool for LLM context preparation with modern header menu system. 

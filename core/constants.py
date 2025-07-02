@@ -8,6 +8,9 @@ when scanning directories for source code files.
 from pathlib import Path
 from typing import Set
 
+# Application version
+APP_VERSION = "v1.4"
+
 # Ignore patterns for cache/build directories and files
 IGNORE_PATTERNS: Set[str] = {
     # Directories to ignore completely

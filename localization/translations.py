@@ -37,6 +37,14 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "show_ignored": "Show ignored",
         "hide_ignored": "Hide ignored",
         
+        # Menu items
+        "menu_file": "File",
+        "menu_select_folder": "Select Folder...",
+        "menu_exit": "Exit",
+        "menu_version": "Version",
+        "menu_about": "About",
+        "menu_current_version": "Current Version:",
+        
         # Error handling messages
         "error_title": "Error",
         "warning_title": "Warning",
@@ -100,6 +108,14 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "ignored_items": "Gizlenen öğeler",
         "show_ignored": "Gizlenenleri göster",
         "hide_ignored": "Gizlenenleri sakla",
+        
+        # Menu items
+        "menu_file": "Dosya",
+        "menu_select_folder": "Klasör Seç...",
+        "menu_exit": "Çıkış",
+        "menu_version": "Sürüm",
+        "menu_about": "Hakkında",
+        "menu_current_version": "Mevcut Sürüm:",
         
         # Error handling messages
         "error_title": "Hata",
@@ -165,6 +181,14 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "show_ignored": "Показать скрытые",
         "hide_ignored": "Скрыть скрытые",
         
+        # Menu items
+        "menu_file": "Файл",
+        "menu_select_folder": "Выбрать папку...",
+        "menu_exit": "Выход",
+        "menu_version": "Версия",
+        "menu_about": "О программе",
+        "menu_current_version": "Текущая версия:",
+        
         # Error handling messages
         "error_title": "Ошибка",
         "warning_title": "Предупреждение",
@@ -228,6 +252,14 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "ignored_items": "Elementos ignorados",
         "show_ignored": "Mostrar ignorados",
         "hide_ignored": "Ocultar ignorados",
+        
+        # Menu items
+        "menu_file": "Archivo",
+        "menu_select_folder": "Seleccionar Carpeta...",
+        "menu_exit": "Salir",
+        "menu_version": "Versión",
+        "menu_about": "Acerca de",
+        "menu_current_version": "Versión Actual:",
         
         # Error handling messages
         "error_title": "Error",
@@ -293,6 +325,14 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "show_ignored": "Mostrar ignorados",
         "hide_ignored": "Ocultar ignorados",
         
+        # Menu items
+        "menu_file": "Arquivo",
+        "menu_select_folder": "Selecionar Pasta...",
+        "menu_exit": "Sair",
+        "menu_version": "Versão",
+        "menu_about": "Sobre",
+        "menu_current_version": "Versão Atual:",
+        
         # Error handling messages
         "error_title": "Erro",
         "warning_title": "Aviso",
@@ -356,6 +396,14 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "ignored_items": "Éléments ignorés",
         "show_ignored": "Afficher ignorés",
         "hide_ignored": "Masquer ignorés",
+        
+        # Menu items
+        "menu_file": "Fichier",
+        "menu_select_folder": "Sélectionner Dossier...",
+        "menu_exit": "Quitter",
+        "menu_version": "Version",
+        "menu_about": "À propos",
+        "menu_current_version": "Version Actuelle:",
         
         # Error handling messages
         "error_title": "Erreur",
@@ -421,6 +469,14 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "show_ignored": "Mostra ignorati",
         "hide_ignored": "Nascondi ignorati",
         
+        # Menu items
+        "menu_file": "File",
+        "menu_select_folder": "Seleziona Cartella...",
+        "menu_exit": "Esci",
+        "menu_version": "Versione",
+        "menu_about": "Informazioni",
+        "menu_current_version": "Versione Corrente:",
+        
         # Error handling messages
         "error_title": "Errore",
         "warning_title": "Avvertimento",
@@ -484,6 +540,14 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "ignored_items": "Проігноровані елементи",
         "show_ignored": "Показати проігноровані",
         "hide_ignored": "Сховати проігноровані",
+        
+        # Menu items
+        "menu_file": "Файл",
+        "menu_select_folder": "Вибрати папку...",
+        "menu_exit": "Вихід",
+        "menu_version": "Версія",
+        "menu_about": "Про програму",
+        "menu_current_version": "Поточна версія:",
         
         # Error handling messages
         "error_title": "Помилка",
@@ -549,6 +613,14 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "show_ignored": "Ignorierte anzeigen",
         "hide_ignored": "Ignorierte verbergen",
         
+        # Menu items
+        "menu_file": "Datei",
+        "menu_select_folder": "Ordner auswählen...",
+        "menu_exit": "Beenden",
+        "menu_version": "Version",
+        "menu_about": "Über",
+        "menu_current_version": "Aktuelle Version:",
+        
         # Error handling messages
         "error_title": "Fehler",
         "warning_title": "Warnung",
@@ -612,6 +684,14 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "ignored_items": "Genegeerde items",
         "show_ignored": "Genegeerde tonen",
         "hide_ignored": "Genegeerde verbergen",
+        
+        # Menu items
+        "menu_file": "Bestand",
+        "menu_select_folder": "Map selecteren...",
+        "menu_exit": "Afsluiten",
+        "menu_version": "Versie",
+        "menu_about": "Over",
+        "menu_current_version": "Huidige Versie:",
         
         # Error handling messages
         "error_title": "Fout",

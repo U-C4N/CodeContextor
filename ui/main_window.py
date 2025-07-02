@@ -16,7 +16,7 @@ from queue import Queue
 # Import from our new modular structure
 from core import (
     FileHandler, CacheManager, count_tokens, threaded, 
-    IGNORE_PATTERNS, IGNORE_EXTENSIONS, should_ignore_path
+    IGNORE_PATTERNS, IGNORE_EXTENSIONS, should_ignore_path, APP_VERSION
 )
 from localization import TRANSLATIONS, get_translation
 from workers import ThreadManager
@@ -79,10 +79,32 @@ class FileExplorer:
         # Configure styling with theme support
         self.ui_styles.configure_root_window(self.master)
         
+        # Create menu bar
+        self._create_menu_bar()
+        
         # Create main layout
         self._create_main_layout()
         self._create_left_panel()
         self._create_right_panel()
+    
+    def _create_menu_bar(self) -> None:
+        """Create the application menu bar."""
+        self.menubar = tk.Menu(self.master)
+        self.master.config(menu=self.menubar)
+        
+        # File menu
+        self.file_menu = tk.Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label=get_translation("EN", "menu_file"), menu=self.file_menu)
+        self.file_menu.add_command(label=get_translation("EN", "menu_select_folder"), command=self.select_folder, accelerator="Ctrl+O")
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label=get_translation("EN", "menu_exit"), command=self.master.quit, accelerator="Ctrl+Q")
+        
+        # Version menu
+        self.version_menu = tk.Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label=get_translation("EN", "menu_version"), menu=self.version_menu)
+        self.version_menu.add_command(label=f"{get_translation('EN', 'menu_current_version')} {APP_VERSION}", state="disabled")
+        self.version_menu.add_separator()
+        self.version_menu.add_command(label=get_translation("EN", "menu_about"), command=self.show_about)
     
     def _create_main_layout(self) -> None:
         """Create the main layout structure."""
@@ -355,7 +377,13 @@ class FileExplorer:
         self.search_var.trace_add("write", self.on_search_change)
         
         # Text events
-        self.text.bind("<<Modified>>", self.on_text_modified) 
+        self.text.bind("<<Modified>>", self.on_text_modified)
+        
+        # Menu keyboard shortcuts
+        self.master.bind("<Control-o>", lambda e: self.select_folder())
+        self.master.bind("<Control-O>", lambda e: self.select_folder())
+        self.master.bind("<Control-q>", lambda e: self.master.quit())
+        self.master.bind("<Control-Q>", lambda e: self.master.quit()) 
 
     # Event handlers and functionality methods
     def on_search_focus_in(self, event):
@@ -407,6 +435,18 @@ class FileExplorer:
         self.token_count_label.config(
             text=get_translation(lang, "total_tokens") + str(count_tokens(self.text.get("1.0", tk.END)))
         )
+        
+        # Update menu labels
+        self.menubar.entryconfig(0, label=get_translation(lang, "menu_file"))
+        self.menubar.entryconfig(1, label=get_translation(lang, "menu_version"))
+        
+        # Update File menu items
+        self.file_menu.entryconfig(0, label=get_translation(lang, "menu_select_folder"))
+        self.file_menu.entryconfig(2, label=get_translation(lang, "menu_exit"))
+        
+        # Update Version menu items
+        self.version_menu.entryconfig(0, label=f"{get_translation(lang, 'menu_current_version')} {APP_VERSION}")
+        self.version_menu.entryconfig(2, label=get_translation(lang, "menu_about"))
         
         self.populate_listbox()
     
@@ -691,4 +731,48 @@ class FileExplorer:
                 )
                 
         except Exception as e:
-            print(f"Error updating scrollbars: {e}") 
+            print(f"Error updating scrollbars: {e}")
+    
+    # Menu handler methods
+    def select_folder(self) -> None:
+        """Open folder selection dialog and navigate to selected folder."""
+        try:
+            folder_path = filedialog.askdirectory(
+                title="Select Folder",
+                initialdir=str(self.current_path)
+            )
+            
+            if folder_path:
+                new_path = Path(folder_path)
+                if new_path.exists() and new_path.is_dir():
+                    self.file_handler.set_current_path(new_path)
+                    self.current_path = new_path
+                    self.populate_listbox()
+                    self.status_label.config(text=f"Navigated to: {folder_path}")
+                else:
+                    lang = self.language_var.get()
+                    messagebox.showerror("Error", f"Invalid folder path: {folder_path}")
+        except Exception as e:
+            lang = self.language_var.get()
+            messagebox.showerror("Error", f"Failed to select folder: {str(e)}")
+    
+    def show_about(self) -> None:
+        """Show about dialog with application information."""
+        about_text = f"""CodeContextor Portable {APP_VERSION}
+
+A specialized Python desktop application designed to prepare and send source code to LLM chats.
+
+Features:
+• Project scanning and source code collection
+• Real-time LLM token estimation
+• Smart filtering with ignore patterns
+• Multi-language support (10 languages)
+• Dark/Light theme toggle
+• Modern, professional UI
+
+Developer: CodeContextor Team
+License: MIT License
+
+Visit our GitHub repository for more information."""
+        
+        messagebox.showinfo("About CodeContextor", about_text) 
