@@ -66,15 +66,15 @@ class UIStyles:
         self.style.configure("Modern.Treeview",
                             background=colors['treeview_bg'],
                             foreground=colors['text_primary'],
-                            borderwidth=1,
-                            relief='solid',
+                            borderwidth=0,
+                            relief='flat',
                             fieldbackground=colors['treeview_bg'])
         
         self.style.configure("Modern.Treeview.Heading",
                             background=colors['button_bg'],
                             foreground=colors['text_primary'],
                             relief='flat',
-                            borderwidth=1)
+                            borderwidth=0)
         
         self.style.map("Modern.Treeview",
                       background=[('selected', colors['treeview_select']),
@@ -88,11 +88,10 @@ class UIStyles:
         self.style.configure("Modern.TButton",
                             background=colors['button_bg'],
                             foreground=colors['text_primary'],
-                            borderwidth=1,
-                            relief='solid',
+                            borderwidth=0,
+                            relief='flat',
                             padding=(self.SPACING['sm'], self.SPACING['xs']),
-                            font=self.FONTS['button'],
-                            bordercolor=colors['border'])
+                            font=self.FONTS['button'])
         
         self.style.map("Modern.TButton",
                       background=[('active', colors['button_hover']),
@@ -102,26 +101,17 @@ class UIStyles:
                       foreground=[('pressed', 'white'),
                                 ('active', colors['text_primary']),
                                 ('focus', colors['text_primary']),
-                                ('!focus', colors['text_primary'])],
-                      bordercolor=[('active', colors['border_hover']),
-                                 ('focus', colors['accent']),
-                                 ('!focus', colors['border'])])
+                                ('!focus', colors['text_primary'])])
         
         # Configure Entry widgets
         self.style.configure("Modern.TEntry",
                             fieldbackground=colors['entry_bg'],
-                            borderwidth=1,
-                            relief='solid',
-                            bordercolor=colors['border'],
-                            focuscolor=colors['accent'],
+                            borderwidth=0,
+                            relief='flat',
                             padding=self.SPACING['xs'],
                             foreground=colors['text_primary'])
         
         self.style.map("Modern.TEntry",
-                      focuscolor=[('focus', colors['accent']),
-                                ('!focus', colors['border'])],
-                      bordercolor=[('focus', colors['accent']),
-                                 ('!focus', colors['border'])],
                       fieldbackground=[('focus', colors['entry_focus']),
                                      ('!focus', colors['entry_bg'])],
                       foreground=[('focus', colors['text_primary']),
@@ -130,17 +120,14 @@ class UIStyles:
         # Configure Combobox
         self.style.configure("Modern.TCombobox",
                             fieldbackground=colors['entry_bg'],
-                            borderwidth=1,
-                            relief='solid',
-                            bordercolor=colors['border'],
+                            borderwidth=0,
+                            relief='flat',
                             arrowcolor=colors['text_secondary'],
                             foreground=colors['text_primary'])
         
         self.style.map("Modern.TCombobox",
                       fieldbackground=[('readonly', colors['entry_bg']),
                                      ('disabled', colors['background_secondary'])],
-                      bordercolor=[('focus', colors['accent']),
-                                 ('!focus', colors['border'])],
                       foreground=[('readonly', colors['text_primary']),
                                 ('disabled', colors['text_muted'])])
         
@@ -216,9 +203,8 @@ class UIStyles:
         colors = self.get_colors()
         default_kwargs = {
             'bg': colors['background_card'],
-            'relief': 'solid',
-            'bd': 1,
-            'highlightbackground': colors['border'],
+            'relief': 'flat',
+            'bd': 0,
             'padx': self.SPACING['md'],
             'pady': self.SPACING['md'],
         }
@@ -237,7 +223,8 @@ class UIStyles:
             'selectforeground': 'white',
             'relief': 'solid',
             'bd': 1,
-            'highlightcolor': colors['accent'],
+            'highlightcolor': colors['border'],
+            'highlightbackground': colors['border'],
             'highlightthickness': 1,
             'font': self.FONTS['code'],
             'wrap': tk.WORD,
