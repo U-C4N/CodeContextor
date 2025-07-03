@@ -10,6 +10,7 @@ from .token_counter import count_tokens
 from .file_handler import FileHandler
 from .cache_manager import CacheManager
 from .utils import threaded
+from .gemini_client import GeminiClient
 
 __all__ = [
     'IGNORE_PATTERNS',
@@ -19,5 +20,6 @@ __all__ = [
     'count_tokens',
     'FileHandler',
     'CacheManager',
-    'threaded'
+    'threaded',
+    'GeminiClient'
 ] 

@@ -1,4 +1,4 @@
-# CodeContextor Portable v1.4
+# CodeContextor Portable v1.5
 
 ## 🖼️ Application Views
 
@@ -64,11 +64,27 @@ CodeContextor/
 └── prototype.py           # Original monolithic version (archived)
 ```
 
+## ✨ What's New in v1.5
+
+### 🤖 Enhanced AI Diagram Generation
+- **Gemini 2.0 Flash**: Upgraded from Gemini 1.5-flash to 2.0-flash-exp for improved performance
+- **Smart Cache Management**: Automatic cache clearing before diagram generation for consistency
+- **Professional Prompts**: Completely rewritten prompts with detailed code analysis rules
+- **Context-Aware Diagrams**: Intelligent diagram generation based on actual code structure
+- **Visual Enhancement**: Modern styling with gradients, shadows, and professional color schemes
+- **Six Diagram Types**: Module dependency, architecture, class hierarchy, sequence, data model, and state machine
+
+### 🔧 Improved Diagram System
+- **Intelligent Demo Generation**: Replaced static demos with context-aware analysis
+- **Code Structure Analysis**: Automatic extraction of imports, classes, functions, and dependencies
+- **Enhanced Canvas Rendering**: Modern UI elements with professional typography
+- **Better Error Handling**: Robust fallback systems for diagram generation failures
+
 ## ✨ What's New in v1.4
 
 ### 📋 Header Menu System
 - **File Menu**: Quick folder navigation with "Select Folder..." option (Ctrl+O)
-- **Version Menu**: Displays current version (v1.4) and About dialog
+- **Version Menu**: Displays current version (v1.5) and About dialog
 - **Keyboard Shortcuts**: Professional navigation with Ctrl+O and Ctrl+Q
 - **Multi-language Menu**: All menu items translate automatically to 10 languages
 - **Folder Selection Dialog**: Browse and navigate to any directory instantly

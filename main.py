@@ -22,8 +22,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 def main():
     """Main entry point for the application."""
-    print("Starting CodeContextor Portable...")
-    print("Modular version - Refactored from prototype.py")
+    print("Starting CodeContextor Portable v1.5...")
+    print("Enhanced with AI diagram generation and improved visual experience")
     
     try:
         root = tk.Tk()

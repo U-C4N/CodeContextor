@@ -1,10 +1,3 @@
-"""
-Theme management system for CodeContextor.
-
-This module provides theme switching capabilities with dark/light mode
-and persistent theme preferences across application sessions.
-"""
-
 import json
 import os
 from pathlib import Path

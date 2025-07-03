@@ -1,10 +1,3 @@
-"""
-Cache management for CodeContextor.
-
-This module provides caching functionality for directory listings
-and file contents to improve performance.
-"""
-
 from pathlib import Path
 from typing import Dict, List, Optional
 import time

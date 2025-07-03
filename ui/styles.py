@@ -1,10 +1,3 @@
-"""
-UI Styling system for CodeContextor.
-
-This module provides the modern shadcn/ui inspired styling for all UI components,
-including color schemes, fonts, and layout configurations with dynamic theme support.
-"""
-
 import tkinter as tk
 from tkinter import ttk
 from typing import Dict, Any, Optional

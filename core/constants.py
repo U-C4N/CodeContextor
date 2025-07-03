@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Set
 
 # Application version
-APP_VERSION = "v1.4"
+APP_VERSION = "v1.5"
 
 # Ignore patterns for cache/build directories and files
 IGNORE_PATTERNS: Set[str] = {

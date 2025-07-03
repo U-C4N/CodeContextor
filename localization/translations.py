@@ -1,13 +1,5 @@
-"""
-Translation system for CodeContextor.
-
-This module contains translations for 10 languages and provides
-utility functions for accessing translations.
-"""
-
 from typing import Dict, List
 
-# Language translations with clean minimal strings
 TRANSLATIONS: Dict[str, Dict[str, str]] = {
     "EN": {
         "title": "Code Contextor Portable",

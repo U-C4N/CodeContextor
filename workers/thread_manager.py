@@ -1,10 +1,3 @@
-"""
-Thread management for CodeContextor.
-
-This module provides thread management and background task processing
-to keep the UI responsive during long-running operations.
-"""
-
 import threading
 import time
 from queue import Queue, Empty

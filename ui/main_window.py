@@ -24,6 +24,7 @@ from .styles import UIStyles
 from .theme_manager import ThemeManager
 from .shortcut_manager import ShortcutManager
 from .error_handler import ErrorHandler
+from .diagram_manager import DiagramManager
 # from .animations import AnimationManager
 
 class FileExplorer:
@@ -56,6 +57,7 @@ class FileExplorer:
         # Initialize UI enhancement components
         self.shortcut_manager = ShortcutManager(self)
         self.error_handler = ErrorHandler(self.master, self.language_var.get())
+        self.diagram_manager = DiagramManager(self, self.theme_manager, self.language_var)
         # self.animation_manager = AnimationManager(self.master)
         
         # Register theme change callback
@@ -98,6 +100,29 @@ class FileExplorer:
         self.file_menu.add_command(label=get_translation("EN", "menu_select_folder"), command=self.select_folder, accelerator="Ctrl+O")
         self.file_menu.add_separator()
         self.file_menu.add_command(label=get_translation("EN", "menu_exit"), command=self.master.quit, accelerator="Ctrl+Q")
+        
+        # Diagrams menu
+        self.diagrams_menu = tk.Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="🎨 Diyagramlar", menu=self.diagrams_menu)
+        
+        # Add diagram types to menu
+        diagram_types = {
+            "module_dependency": ("📦", "Modül/Bağımlılık Grafiği"),
+            "architecture": ("🏗️", "Yüksek‑Düzey Mimari"),
+            "class_hierarchy": ("🔗", "Sınıf Hiyerarşisi"),
+            "sequence": ("⏭️", "Akış Diyagramı"),
+            "data_model": ("🗃️", "Veri Modeli (ER)"),
+            "state_machine": ("🔄", "Durum Makinesi")
+        }
+        
+        for diagram_type, (icon, name) in diagram_types.items():
+            self.diagrams_menu.add_command(
+                label=f"{icon} {name}",
+                command=lambda dt=diagram_type: self._generate_specific_diagram(dt)
+            )
+        
+        self.diagrams_menu.add_separator()
+        self.diagrams_menu.add_command(label="✨ Diyagram Sihirbazı", command=self.diagram_manager.show_diagram_menu)
         
         # Version menu
         self.version_menu = tk.Menu(self.menubar, tearoff=0)
@@ -438,7 +463,8 @@ class FileExplorer:
         
         # Update menu labels
         self.menubar.entryconfig(0, label=get_translation(lang, "menu_file"))
-        self.menubar.entryconfig(1, label=get_translation(lang, "menu_version"))
+        self.menubar.entryconfig(1, label="🎨 Diyagramlar")
+        self.menubar.entryconfig(2, label=get_translation(lang, "menu_version"))
         
         # Update File menu items
         self.file_menu.entryconfig(0, label=get_translation(lang, "menu_select_folder"))
@@ -769,10 +795,31 @@ Features:
 • Multi-language support (10 languages)
 • Dark/Light theme toggle
 • Modern, professional UI
+• AI-powered Mermaid diagram generation
 
 Developer: CodeContextor Team
 License: MIT License
 
 Visit our GitHub repository for more information."""
         
-        messagebox.showinfo("About CodeContextor", about_text) 
+        messagebox.showinfo("About CodeContextor", about_text)
+    
+    def _generate_specific_diagram(self, diagram_type: str) -> None:
+        """Generate specific diagram type directly."""
+        # Get selected code from text widget
+        code_context = ""
+        try:
+            if hasattr(self, 'text'):
+                code_context = self.text.get("1.0", tk.END).strip()
+        except:
+            pass
+        
+        if not code_context:
+            messagebox.showwarning(
+                "Uyarı", 
+                "Lütfen önce sol panelden dosyaları seçin ve kod analiz edilsin."
+            )
+            return
+        
+        # Generate diagram using diagram manager
+        self.diagram_manager._generate_and_preview(diagram_type, code_context) 

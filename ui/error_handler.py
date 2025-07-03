@@ -1,10 +1,3 @@
-"""
-Error handler for CodeContextor.
-
-This module provides user-friendly error handling and messaging for the application,
-with localization support and proper logging.
-"""
-
 import tkinter as tk
 from tkinter import messagebox
 import logging

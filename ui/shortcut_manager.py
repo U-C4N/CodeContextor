@@ -1,10 +1,3 @@
-"""
-Keyboard shortcut manager for CodeContextor.
-
-This module provides centralized keyboard shortcut handling for the application,
-including Ctrl+A (select all), Ctrl+C (copy), and Ctrl+S (save).
-"""
-
 import tkinter as tk
 from typing import Optional, Callable
 
