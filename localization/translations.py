@@ -31,11 +31,44 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         
         # Menu items
         "menu_file": "File",
+        "menu_diagrams": "Diagrams",
         "menu_select_folder": "Select Folder...",
         "menu_exit": "Exit",
         "menu_version": "Version",
         "menu_about": "About",
         "menu_current_version": "Current Version:",
+        
+        # Diagram menu items
+        "diagram_module_dependency": "Module/Dependency Graph",
+        "diagram_architecture": "High-Level Architecture",
+        "diagram_class_hierarchy": "Class Hierarchy",
+        "diagram_sequence": "Flow Diagram",
+        "diagram_data_model": "Data Model (ER)",
+        "diagram_state_machine": "State Machine",
+        "diagram_wizard": "Diagram Wizard",
+        
+        # Diagram generation messages
+        "diagram_warning_title": "Warning",
+        "diagram_no_code_selected": "Please select files from the left panel first and let the code be analyzed.",
+        
+        # Diagram descriptions
+        "diagram_module_dependency_desc": "Import chain and bottleneck modules",
+        "diagram_architecture_desc": "Services, API layers, DB",
+        "diagram_class_hierarchy_desc": "OOP classes and inheritance",
+        "diagram_sequence_desc": "REST calls and workflow",
+        "diagram_data_model_desc": "Tables and relationships",
+        "diagram_state_machine_desc": "Finite states and transitions",
+        
+        # Diagram dialog messages
+        "diagram_dialog_title": "Diagram Generator",
+        "diagram_select_type": "🎨 Select Diagram Type",
+        "diagram_generate_button": "✨ Generate Diagram",
+        "diagram_cancel_button": "❌ Cancel",
+        "diagram_select_warning": "Please select a diagram type.",
+        "diagram_select_code_warning": "Please select code to analyze.",
+        "diagram_tip": "💡 Tip: Select files from the left panel, then generate diagram",
+        "diagram_api_error": "Gemini API key is not set. Please check settings.",
+        "diagram_error_title": "Error",
         
         # Error handling messages
         "error_title": "Error",
@@ -103,11 +136,25 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         
         # Menu items
         "menu_file": "Dosya",
+        "menu_diagrams": "Diyagramlar",
         "menu_select_folder": "Klasör Seç...",
         "menu_exit": "Çıkış",
         "menu_version": "Sürüm",
         "menu_about": "Hakkında",
         "menu_current_version": "Mevcut Sürüm:",
+        
+        # Diagram menu items
+        "diagram_module_dependency": "Modül/Bağımlılık Grafiği",
+        "diagram_architecture": "Yüksek‑Düzey Mimari",
+        "diagram_class_hierarchy": "Sınıf Hiyerarşisi",
+        "diagram_sequence": "Akış Diyagramı",
+        "diagram_data_model": "Veri Modeli (ER)",
+        "diagram_state_machine": "Durum Makinesi",
+        "diagram_wizard": "Diyagram Sihirbazı",
+        
+        # Diagram generation messages
+        "diagram_warning_title": "Uyarı",
+        "diagram_no_code_selected": "Lütfen önce sol panelden dosyaları seçin ve kod analiz edilsin.",
         
         # Error handling messages
         "error_title": "Hata",
@@ -175,11 +222,25 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         
         # Menu items
         "menu_file": "Файл",
+        "menu_diagrams": "Диаграммы",
         "menu_select_folder": "Выбрать папку...",
         "menu_exit": "Выход",
         "menu_version": "Версия",
         "menu_about": "О программе",
         "menu_current_version": "Текущая версия:",
+        
+        # Diagram menu items
+        "diagram_module_dependency": "Граф модулей/зависимостей",
+        "diagram_architecture": "Высокоуровневая архитектура",
+        "diagram_class_hierarchy": "Иерархия классов",
+        "diagram_sequence": "Диаграмма потока",
+        "diagram_data_model": "Модель данных (ER)",
+        "diagram_state_machine": "Конечный автомат",
+        "diagram_wizard": "Мастер диаграмм",
+        
+        # Diagram generation messages
+        "diagram_warning_title": "Предупреждение",
+        "diagram_no_code_selected": "Сначала выберите файлы из левой панели и позвольте коду быть проанализированным.",
         
         # Error handling messages
         "error_title": "Ошибка",
@@ -247,11 +308,25 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         
         # Menu items
         "menu_file": "Archivo",
+        "menu_diagrams": "Diagramas",
         "menu_select_folder": "Seleccionar Carpeta...",
         "menu_exit": "Salir",
         "menu_version": "Versión",
         "menu_about": "Acerca de",
         "menu_current_version": "Versión Actual:",
+        
+        # Diagram menu items
+        "diagram_module_dependency": "Gráfico de Módulos/Dependencias",
+        "diagram_architecture": "Arquitectura de Alto Nivel",
+        "diagram_class_hierarchy": "Jerarquía de Clases",
+        "diagram_sequence": "Diagrama de Flujo",
+        "diagram_data_model": "Modelo de Datos (ER)",
+        "diagram_state_machine": "Máquina de Estados",
+        "diagram_wizard": "Asistente de Diagramas",
+        
+        # Diagram generation messages
+        "diagram_warning_title": "Advertencia",
+        "diagram_no_code_selected": "Primero seleccione archivos del panel izquierdo y permita que el código sea analizado.",
         
         # Error handling messages
         "error_title": "Error",
@@ -319,11 +394,25 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         
         # Menu items
         "menu_file": "Arquivo",
+        "menu_diagrams": "Diagramas",
         "menu_select_folder": "Selecionar Pasta...",
         "menu_exit": "Sair",
         "menu_version": "Versão",
         "menu_about": "Sobre",
         "menu_current_version": "Versão Atual:",
+        
+        # Diagram menu items
+        "diagram_module_dependency": "Gráfico de Módulos/Dependências",
+        "diagram_architecture": "Arquitetura de Alto Nível",
+        "diagram_class_hierarchy": "Hierarquia de Classes",
+        "diagram_sequence": "Diagrama de Fluxo",
+        "diagram_data_model": "Modelo de Dados (ER)",
+        "diagram_state_machine": "Máquina de Estados",
+        "diagram_wizard": "Assistente de Diagramas",
+        
+        # Diagram generation messages
+        "diagram_warning_title": "Aviso",
+        "diagram_no_code_selected": "Primeiro selecione arquivos do painel esquerdo e permita que o código seja analisado.",
         
         # Error handling messages
         "error_title": "Erro",
@@ -391,11 +480,25 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         
         # Menu items
         "menu_file": "Fichier",
+        "menu_diagrams": "Diagrammes",
         "menu_select_folder": "Sélectionner Dossier...",
         "menu_exit": "Quitter",
         "menu_version": "Version",
         "menu_about": "À propos",
         "menu_current_version": "Version Actuelle:",
+        
+        # Diagram menu items
+        "diagram_module_dependency": "Graphique Modules/Dépendances",
+        "diagram_architecture": "Architecture de Haut Niveau",
+        "diagram_class_hierarchy": "Hiérarchie des Classes",
+        "diagram_sequence": "Diagramme de Flux",
+        "diagram_data_model": "Modèle de Données (ER)",
+        "diagram_state_machine": "Machine d'État",
+        "diagram_wizard": "Assistant de Diagrammes",
+        
+        # Diagram generation messages
+        "diagram_warning_title": "Avertissement",
+        "diagram_no_code_selected": "Veuillez d'abord sélectionner des fichiers depuis le panneau gauche et laisser le code être analysé.",
         
         # Error handling messages
         "error_title": "Erreur",
@@ -463,11 +566,25 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         
         # Menu items
         "menu_file": "File",
+        "menu_diagrams": "Diagrammi",
         "menu_select_folder": "Seleziona Cartella...",
         "menu_exit": "Esci",
         "menu_version": "Versione",
         "menu_about": "Informazioni",
         "menu_current_version": "Versione Corrente:",
+        
+        # Diagram menu items
+        "diagram_module_dependency": "Grafico Moduli/Dipendenze",
+        "diagram_architecture": "Architettura di Alto Livello",
+        "diagram_class_hierarchy": "Gerarchia delle Classi",
+        "diagram_sequence": "Diagramma di Flusso",
+        "diagram_data_model": "Modello Dati (ER)",
+        "diagram_state_machine": "Macchina a Stati",
+        "diagram_wizard": "Procedura Guidata Diagrammi",
+        
+        # Diagram generation messages
+        "diagram_warning_title": "Avvertimento",
+        "diagram_no_code_selected": "Seleziona prima i file dal pannello sinistro e lascia che il codice venga analizzato.",
         
         # Error handling messages
         "error_title": "Errore",
@@ -535,11 +652,25 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         
         # Menu items
         "menu_file": "Файл",
+        "menu_diagrams": "Діаграми",
         "menu_select_folder": "Вибрати папку...",
         "menu_exit": "Вихід",
         "menu_version": "Версія",
         "menu_about": "Про програму",
         "menu_current_version": "Поточна версія:",
+        
+        # Diagram menu items
+        "diagram_module_dependency": "Граф модулів/залежностей",
+        "diagram_architecture": "Високорівнева архітектура",
+        "diagram_class_hierarchy": "Ієрархія класів",
+        "diagram_sequence": "Діаграма потоку",
+        "diagram_data_model": "Модель даних (ER)",
+        "diagram_state_machine": "Кінцевий автомат",
+        "diagram_wizard": "Майстер діаграм",
+        
+        # Diagram generation messages
+        "diagram_warning_title": "Попередження",
+        "diagram_no_code_selected": "Спочатку виберіть файли з лівої панелі і дозвольте коду бути проаналізованим.",
         
         # Error handling messages
         "error_title": "Помилка",
@@ -607,11 +738,25 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         
         # Menu items
         "menu_file": "Datei",
+        "menu_diagrams": "Diagramme",
         "menu_select_folder": "Ordner auswählen...",
         "menu_exit": "Beenden",
         "menu_version": "Version",
         "menu_about": "Über",
         "menu_current_version": "Aktuelle Version:",
+        
+        # Diagram menu items
+        "diagram_module_dependency": "Modul-/Abhängigkeitsgraph",
+        "diagram_architecture": "High-Level-Architektur",
+        "diagram_class_hierarchy": "Klassenhierarchie",
+        "diagram_sequence": "Flussdiagramm",
+        "diagram_data_model": "Datenmodell (ER)",
+        "diagram_state_machine": "Zustandsmaschine",
+        "diagram_wizard": "Diagramm-Assistent",
+        
+        # Diagram generation messages
+        "diagram_warning_title": "Warnung",
+        "diagram_no_code_selected": "Bitte wählen Sie zuerst Dateien aus dem linken Bereich aus und lassen Sie den Code analysieren.",
         
         # Error handling messages
         "error_title": "Fehler",
@@ -679,11 +824,25 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         
         # Menu items
         "menu_file": "Bestand",
+        "menu_diagrams": "Diagrammen",
         "menu_select_folder": "Map selecteren...",
         "menu_exit": "Afsluiten",
         "menu_version": "Versie",
         "menu_about": "Over",
         "menu_current_version": "Huidige Versie:",
+        
+        # Diagram menu items
+        "diagram_module_dependency": "Module/Afhankelijkheidsgrafiek",
+        "diagram_architecture": "High-Level Architectuur",
+        "diagram_class_hierarchy": "Klassenhiërarchie",
+        "diagram_sequence": "Stroomdiagram",
+        "diagram_data_model": "Datamodel (ER)",
+        "diagram_state_machine": "Toestandsmachine",
+        "diagram_wizard": "Diagram Wizard",
+        
+        # Diagram generation messages
+        "diagram_warning_title": "Waarschuwing",
+        "diagram_no_code_selected": "Selecteer eerst bestanden uit het linkerpaneel en laat de code worden geanalyseerd.",
         
         # Error handling messages
         "error_title": "Fout",

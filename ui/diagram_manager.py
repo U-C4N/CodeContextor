@@ -16,6 +16,7 @@ import os
 
 from core.gemini_client import GeminiClient
 from core.cache_manager import CacheManager
+from localization.translations import get_translation
 
 class DiagramManager:
     """Manager for diagram generation and preview functionality."""

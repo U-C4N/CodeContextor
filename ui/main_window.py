@@ -96,40 +96,24 @@ class FileExplorer:
         
         # File menu
         self.file_menu = tk.Menu(self.menubar, tearoff=0)
-        self.menubar.add_cascade(label=get_translation("EN", "menu_file"), menu=self.file_menu)
-        self.file_menu.add_command(label=get_translation("EN", "menu_select_folder"), command=self.select_folder, accelerator="Ctrl+O")
+        self.menubar.add_cascade(label=get_translation(self.language_var.get(), "menu_file"), menu=self.file_menu)
+        self.file_menu.add_command(label=get_translation(self.language_var.get(), "menu_select_folder"), command=self.select_folder, accelerator="Ctrl+O")
         self.file_menu.add_separator()
-        self.file_menu.add_command(label=get_translation("EN", "menu_exit"), command=self.master.quit, accelerator="Ctrl+Q")
+        self.file_menu.add_command(label=get_translation(self.language_var.get(), "menu_exit"), command=self.master.quit, accelerator="Ctrl+Q")
         
         # Diagrams menu
         self.diagrams_menu = tk.Menu(self.menubar, tearoff=0)
-        self.menubar.add_cascade(label="🎨 Diyagramlar", menu=self.diagrams_menu)
+        self.menubar.add_cascade(label="🎨 " + get_translation(self.language_var.get(), "menu_diagrams"), menu=self.diagrams_menu)
         
-        # Add diagram types to menu
-        diagram_types = {
-            "module_dependency": ("📦", "Modül/Bağımlılık Grafiği"),
-            "architecture": ("🏗️", "Yüksek‑Düzey Mimari"),
-            "class_hierarchy": ("🔗", "Sınıf Hiyerarşisi"),
-            "sequence": ("⏭️", "Akış Diyagramı"),
-            "data_model": ("🗃️", "Veri Modeli (ER)"),
-            "state_machine": ("🔄", "Durum Makinesi")
-        }
-        
-        for diagram_type, (icon, name) in diagram_types.items():
-            self.diagrams_menu.add_command(
-                label=f"{icon} {name}",
-                command=lambda dt=diagram_type: self._generate_specific_diagram(dt)
-            )
-        
-        self.diagrams_menu.add_separator()
-        self.diagrams_menu.add_command(label="✨ Diyagram Sihirbazı", command=self.diagram_manager.show_diagram_menu)
+        # Initialize diagram menu items
+        self._update_diagram_menu()
         
         # Version menu
         self.version_menu = tk.Menu(self.menubar, tearoff=0)
-        self.menubar.add_cascade(label=get_translation("EN", "menu_version"), menu=self.version_menu)
-        self.version_menu.add_command(label=f"{get_translation('EN', 'menu_current_version')} {APP_VERSION}", state="disabled")
+        self.menubar.add_cascade(label=get_translation(self.language_var.get(), "menu_version"), menu=self.version_menu)
+        self.version_menu.add_command(label=f"{get_translation(self.language_var.get(), 'menu_current_version')} {APP_VERSION}", state="disabled")
         self.version_menu.add_separator()
-        self.version_menu.add_command(label=get_translation("EN", "menu_about"), command=self.show_about)
+        self.version_menu.add_command(label=get_translation(self.language_var.get(), "menu_about"), command=self.show_about)
     
     def _create_main_layout(self) -> None:
         """Create the main layout structure."""
@@ -157,7 +141,7 @@ class FileExplorer:
         
         self.left_label = ttk.Label(
             title_container, 
-            text=get_translation("EN", "directory_content"),
+            text=get_translation(self.language_var.get(), "directory_content"),
             style="Heading.TLabel"
         )
         self.left_label.pack(side=tk.LEFT, anchor="w")
@@ -175,7 +159,7 @@ class FileExplorer:
         # Up directory button
         self.up_button = ttk.Button(
             title_container,
-            text="↑ " + get_translation("EN", "up_directory"),
+            text="↑ " + get_translation(self.language_var.get(), "up_directory"),
             command=self.go_up_directory,
             style="Modern.TButton"
         )
@@ -213,7 +197,7 @@ class FileExplorer:
             style="Modern.TEntry"
         )
         self.search_entry.pack(fill=tk.X, ipady=4)
-        self.search_entry.insert(0, get_translation("EN", "search_placeholder"))
+        self.search_entry.insert(0, get_translation(self.language_var.get(), "search_placeholder"))
         
         # Show ignored toggle
         ignore_frame = self.ui_styles.create_card_frame(parent)
@@ -222,7 +206,7 @@ class FileExplorer:
         self.show_ignored_var = tk.BooleanVar(value=False)
         self.show_ignored_check = ttk.Checkbutton(
             ignore_frame,
-            text=get_translation("EN", "show_ignored"),
+            text=get_translation(self.language_var.get(), "show_ignored"),
             variable=self.show_ignored_var,
             command=self.toggle_ignored_items,
             style="Modern.TCheckbutton"
@@ -267,7 +251,7 @@ class FileExplorer:
         
         self.select_all_button = ttk.Button(
             button_frame,
-            text=get_translation("EN", "select_all"),
+            text=get_translation(self.language_var.get(), "select_all"),
             command=self.select_all,
             style="Modern.TButton"
         )
@@ -275,7 +259,7 @@ class FileExplorer:
         
         self.clear_selection_button = ttk.Button(
             button_frame,
-            text=get_translation("EN", "clear_selection"),
+            text=get_translation(self.language_var.get(), "clear_selection"),
             command=self.clear_selection,
             style="Modern.TButton"
         )
@@ -304,7 +288,7 @@ class FileExplorer:
         # Title
         self.right_label = ttk.Label(
             header_frame,
-            text=get_translation("EN", "source_code"),
+            text=get_translation(self.language_var.get(), "source_code"),
             style="Heading.TLabel"
         )
         self.right_label.pack(side=tk.LEFT, anchor="w")
@@ -327,7 +311,7 @@ class FileExplorer:
         # Action buttons
         self.copy_button = ttk.Button(
             controls_frame,
-            text=get_translation("EN", "copy"),
+            text=get_translation(self.language_var.get(), "copy"),
             command=self.copy_to_clipboard,
             style="Modern.TButton"
         )
@@ -335,7 +319,7 @@ class FileExplorer:
         
         self.save_button = ttk.Button(
             controls_frame,
-            text=get_translation("EN", "save"),
+            text=get_translation(self.language_var.get(), "save"),
             command=self.save_to_file,
             style="Modern.TButton"
         )
@@ -374,7 +358,7 @@ class FileExplorer:
         # Token count
         self.token_count_label = ttk.Label(
             self.status_frame,
-            text=get_translation("EN", "total_tokens") + "0",
+            text=get_translation(self.language_var.get(), "total_tokens") + "0",
             style="Modern.TLabel"
         )
         self.token_count_label.pack(side=tk.RIGHT, padx=20)
@@ -463,7 +447,7 @@ class FileExplorer:
         
         # Update menu labels
         self.menubar.entryconfig(0, label=get_translation(lang, "menu_file"))
-        self.menubar.entryconfig(1, label="🎨 Diyagramlar")
+        self.menubar.entryconfig(1, label="🎨 " + get_translation(lang, "menu_diagrams"))
         self.menubar.entryconfig(2, label=get_translation(lang, "menu_version"))
         
         # Update File menu items
@@ -474,7 +458,35 @@ class FileExplorer:
         self.version_menu.entryconfig(0, label=f"{get_translation(lang, 'menu_current_version')} {APP_VERSION}")
         self.version_menu.entryconfig(2, label=get_translation(lang, "menu_about"))
         
+        # Update Diagram menu items
+        self._update_diagram_menu()
+        
         self.populate_listbox()
+    
+    def _update_diagram_menu(self) -> None:
+        """Update diagram menu items with current language."""
+        # Clear existing menu items
+        self.diagrams_menu.delete(0, tk.END)
+        
+        # Add diagram types to menu
+        diagram_types = [
+            ("module_dependency", "📦", "diagram_module_dependency"),
+            ("architecture", "🏗️", "diagram_architecture"),
+            ("class_hierarchy", "🔗", "diagram_class_hierarchy"),
+            ("sequence", "⏭️", "diagram_sequence"),
+            ("data_model", "🗃️", "diagram_data_model"),
+            ("state_machine", "🔄", "diagram_state_machine")
+        ]
+        
+        lang = self.language_var.get()
+        for diagram_type, icon, translation_key in diagram_types:
+            self.diagrams_menu.add_command(
+                label=f"{icon} {get_translation(lang, translation_key)}",
+                command=lambda dt=diagram_type: self._generate_specific_diagram(dt)
+            )
+        
+        self.diagrams_menu.add_separator()
+        self.diagrams_menu.add_command(label="✨ " + get_translation(lang, "diagram_wizard"), command=self.diagram_manager.show_diagram_menu)
     
     def toggle_ignored_items(self):
         """Toggle showing ignored items"""
@@ -815,9 +827,10 @@ Visit our GitHub repository for more information."""
             pass
         
         if not code_context:
+            lang = self.language_var.get()
             messagebox.showwarning(
-                "Uyarı", 
-                "Lütfen önce sol panelden dosyaları seçin ve kod analiz edilsin."
+                get_translation(lang, "diagram_warning_title"), 
+                get_translation(lang, "diagram_no_code_selected")
             )
             return
         
