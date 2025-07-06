@@ -23,33 +23,33 @@ class DiagramManager:
     
     DIAGRAM_TYPES = {
         "module_dependency": {
-            "name": "Modül/Bağımlılık Grafiği",
-            "description": "Import zinciri ve bottleneck modülleri",
+            "name_key": "diagram_module_dependency",
+            "description_key": "diagram_module_dependency_desc",
             "icon": "📦"
         },
         "architecture": {
-            "name": "Yüksek‑Düzey Mimari",
-            "description": "Servisler, API katmanları, DB",
+            "name_key": "diagram_architecture",
+            "description_key": "diagram_architecture_desc",
             "icon": "🏗️"
         },
         "class_hierarchy": {
-            "name": "Sınıf Hiyerarşisi", 
-            "description": "OOP sınıflar ve kalıtım",
+            "name_key": "diagram_class_hierarchy", 
+            "description_key": "diagram_class_hierarchy_desc",
             "icon": "🔗"
         },
         "sequence": {
-            "name": "Akış Diyagramı",
-            "description": "REST çağrıları ve iş akışı",
+            "name_key": "diagram_sequence",
+            "description_key": "diagram_sequence_desc",
             "icon": "⏭️"
         },
         "data_model": {
-            "name": "Veri Modeli (ER)",
-            "description": "Tablolar ve ilişkiler",
+            "name_key": "diagram_data_model",
+            "description_key": "diagram_data_model_desc",
             "icon": "🗃️"
         },
         "state_machine": {
-            "name": "Durum Makinesi",
-            "description": "Finite state'ler ve geçişler",
+            "name_key": "diagram_state_machine",
+            "description_key": "diagram_state_machine_desc",
             "icon": "🔄"
         }
     }
@@ -80,15 +80,17 @@ class DiagramManager:
     def show_diagram_menu(self, event=None):
         """Show diagram selection dialog."""
         if not self.gemini_client:
+            lang = self.language_var.get()
             messagebox.showerror(
-                "Hata",
-                "Gemini API anahtarı ayarlanmamış. Lütfen ayarları kontrol edin."
+                get_translation(lang, "diagram_error_title"),
+                get_translation(lang, "diagram_api_error")
             )
             return
             
         # Create dialog window
         dialog = tk.Toplevel(self.parent.master)
-        dialog.title("Diyagram Oluşturucu")
+        lang = self.language_var.get()
+        dialog.title(get_translation(lang, "diagram_dialog_title"))
         dialog.geometry("600x500")
         dialog.transient(self.parent.master)
         dialog.grab_set()
@@ -111,7 +113,7 @@ class DiagramManager:
         # Title
         title_label = ttk.Label(
             main_frame,
-            text="🎨 Diyagram Tipi Seçin",
+            text=get_translation(lang, "diagram_select_type"),
             style="Heading.TLabel" if hasattr(self.theme_manager, 'get_colors') else None
         )
         title_label.pack(pady=(0, 20))
@@ -130,7 +132,7 @@ class DiagramManager:
             
             radio = ttk.Radiobutton(
                 frame,
-                text=f"{type_info['icon']} {type_info['name']}",
+                text=f"{type_info['icon']} {get_translation(lang, type_info['name_key'])}",
                 variable=selected_type,
                 value=type_key
             )
@@ -138,7 +140,7 @@ class DiagramManager:
             
             desc_label = ttk.Label(
                 frame,
-                text=type_info['description'],
+                text=get_translation(lang, type_info['description_key']),
                 foreground='gray'
             )
             desc_label.pack(side=tk.LEFT, padx=(10, 0))
@@ -154,13 +156,13 @@ class DiagramManager:
         def generate_diagram():
             """Generate and preview diagram."""
             if not selected_type.get():
-                messagebox.showwarning("Uyarı", "Lütfen bir diyagram tipi seçin.")
+                messagebox.showwarning(get_translation(lang, "diagram_warning_title"), get_translation(lang, "diagram_select_warning"))
                 return
                 
             # Get selected code from main window
             code_context = self._get_selected_code()
             if not code_context:
-                messagebox.showwarning("Uyarı", "Lütfen analiz edilecek kod seçin.")
+                messagebox.showwarning(get_translation(lang, "diagram_warning_title"), get_translation(lang, "diagram_select_code_warning"))
                 return
                 
             dialog.destroy()
@@ -173,20 +175,20 @@ class DiagramManager:
         # Buttons
         ttk.Button(
             button_frame,
-            text="❌ İptal",
+            text=get_translation(lang, "diagram_cancel_button"),
             command=cancel
         ).pack(side=tk.LEFT, padx=(0, 10))
         
         ttk.Button(
             button_frame,
-            text="✨ Diyagram Oluştur",
+            text=get_translation(lang, "diagram_generate_button"),
             command=generate_diagram
         ).pack(side=tk.LEFT)
         
         # Instruction label
         instruction_label = ttk.Label(
             main_frame,
-            text="💡 İpucu: Sol panelden dosyaları seçin, sonra diyagram oluşturun",
+            text=get_translation(lang, "diagram_tip"),
             foreground='gray'
         )
         instruction_label.pack(pady=(10, 0))
@@ -222,7 +224,9 @@ class DiagramManager:
                 if not self.gemini_client:
                     print("DEBUG: No Gemini client available")
                     loading_dialog.destroy()
-                    messagebox.showerror("Hata", "Gemini API client başlatılamadı.")
+                    lang = self.language_var.get()
+                    messagebox.showerror(get_translation(lang, "diagram_error_title"), 
+                                       get_translation(lang, "diagram_client_error"))
                     return
                 
                 # Generate diagram using Gemini
@@ -246,22 +250,28 @@ class DiagramManager:
                     if demo_code:
                         self._show_mermaid_result(demo_code, diagram_type)
                     else:
-                        messagebox.showerror("Hata", "Diyagram oluşturulamadı.")
+                        lang = self.language_var.get()
+                        messagebox.showerror(get_translation(lang, "diagram_error_title"), 
+                                           get_translation(lang, "diagram_generation_failed"))
                     
             except Exception as e:
                 print(f"DEBUG: Exception in background generation: {e}")
                 import traceback
                 traceback.print_exc()
                 loading_dialog.destroy()
-                messagebox.showerror("Hata", f"Bir hata oluştu: {str(e)}")
+                lang = self.language_var.get()
+                messagebox.showerror(get_translation(lang, "diagram_error_title"), 
+                                   f"{get_translation(lang, 'diagram_error_occurred')} {str(e)}")
         
         # Start generation in background thread
         threading.Thread(target=generate_in_background, daemon=True).start()
     
     def _show_loading_dialog(self) -> tk.Toplevel:
         """Show loading dialog."""
+        lang = self.language_var.get()
+        
         dialog = tk.Toplevel(self.parent.master)
-        dialog.title("Diyagram Oluşturuluyor...")
+        dialog.title(get_translation(lang, "diagram_loading_title"))
         dialog.geometry("300x150")
         dialog.transient(self.parent.master)
         dialog.grab_set()
@@ -276,21 +286,22 @@ class DiagramManager:
         frame = ttk.Frame(dialog)
         frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
-        ttk.Label(frame, text="🤖 Gemini AI Çalışıyor...").pack(pady=10)
+        ttk.Label(frame, text=get_translation(lang, "diagram_gemini_working")).pack(pady=10)
         
         # Progress bar
         progress = ttk.Progressbar(frame, mode='indeterminate')
         progress.pack(fill=tk.X, pady=10)
         progress.start()
         
-        ttk.Label(frame, text="Lütfen bekleyin...").pack()
+        ttk.Label(frame, text=get_translation(lang, "diagram_please_wait")).pack()
         
         return dialog
     
     def _show_mermaid_result(self, mermaid_code: str, diagram_type: str):
         """Show Mermaid code result with preview in a split dialog."""
+        lang = self.language_var.get()
         type_info = self.DIAGRAM_TYPES.get(diagram_type, {})
-        title = type_info.get('name', 'Diyagram')
+        title = get_translation(lang, type_info.get('name', 'diagram_fallback_title'))
         icon = type_info.get('icon', '🎨')
         
         # Create result dialog
@@ -316,7 +327,7 @@ class DiagramManager:
         
         title_label = ttk.Label(
             header_frame,
-            text=f"✅ {title} Oluşturuldu!",
+            text=get_translation(lang, "diagram_created_success").format(title=title),
             style="Heading.TLabel" if hasattr(self.theme_manager, 'get_colors') else None
         )
         title_label.pack(side=tk.LEFT)
@@ -326,7 +337,7 @@ class DiagramManager:
         panels_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 15))
         
         # Left panel - Mermaid code
-        left_frame = ttk.LabelFrame(panels_frame, text="📋 Mermaid Kodu:")
+        left_frame = ttk.LabelFrame(panels_frame, text=get_translation(lang, "diagram_mermaid_code_label"))
         left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 10))
         
         # Text widget for code
@@ -346,7 +357,7 @@ class DiagramManager:
         code_text.config(state=tk.DISABLED)  # Make it read-only
         
         # Right panel - Preview
-        right_frame = ttk.LabelFrame(panels_frame, text="👁️ Preview:")
+        right_frame = ttk.LabelFrame(panels_frame, text=get_translation(lang, "diagram_preview_label"))
         right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(10, 0))
         
         # Preview canvas frame
@@ -371,7 +382,7 @@ class DiagramManager:
         
         info_label = ttk.Label(
             info_frame,
-            text="💡 Basit önizleme - Tam görüntü için tarayıcı butonunu kullanın",
+            text=get_translation(lang, "diagram_preview_info"),
             font=('Arial', 8),
             foreground='gray'
         )
@@ -380,7 +391,7 @@ class DiagramManager:
         # Single preview button
         def open_browser_preview():
             """Open full Mermaid preview in browser."""
-            html_content = self._create_preview_html(mermaid_code, title)
+            html_content = self._create_preview_html(mermaid_code, title, lang)
             temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, encoding='utf-8')
             temp_file.write(html_content)
             temp_file.close()
@@ -388,7 +399,7 @@ class DiagramManager:
         
         preview_button = ttk.Button(
             info_frame,
-            text="🌐 Tam Görüntü",
+            text=get_translation(lang, "diagram_full_view_button"),
             command=open_browser_preview
         )
         preview_button.pack(pady=5)
@@ -401,7 +412,8 @@ class DiagramManager:
             """Copy Mermaid code to clipboard."""
             dialog.clipboard_clear()
             dialog.clipboard_append(mermaid_code)
-            messagebox.showinfo("✅ Kopyalandı", "Mermaid kodu panoya kopyalandı!")
+            messagebox.showinfo(get_translation(lang, "diagram_copy_success_title"), 
+                              get_translation(lang, "diagram_copy_success_message"))
         
         def close_dialog():
             """Close the dialog."""
@@ -410,21 +422,37 @@ class DiagramManager:
         # Buttons
         ttk.Button(
             button_frame,
-            text="📋 Kodu Kopyala",
+            text=get_translation(lang, "diagram_copy_button"),
             command=copy_code
         ).pack(side=tk.LEFT, padx=(0, 10))
         
         ttk.Button(
             button_frame,
-            text="✅ Tamam",
+            text=get_translation(lang, "diagram_close_button"),
             command=close_dialog
         ).pack(side=tk.LEFT)
     
-    def _create_preview_html(self, mermaid_code: str, title: str) -> str:
+    def _create_preview_html(self, mermaid_code: str, title: str, language: str = "EN") -> str:
         """Create HTML for Mermaid preview."""
+        # Language code mapping
+        lang_codes = {
+            "EN": "en",
+            "TR": "tr", 
+            "RU": "ru",
+            "ES": "es",
+            "PT": "pt",
+            "FR": "fr",
+            "IT": "it",
+            "UA": "uk",
+            "DE": "de",
+            "NL": "nl"
+        }
+        lang_code = lang_codes.get(language, "en")
+        created_with_text = get_translation(language, "diagram_html_created_with")
+        
         return f"""
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="{lang_code}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -474,7 +502,7 @@ class DiagramManager:
     <div class="container">
         <div class="header">
             <h1>🎨 {title}</h1>
-            <p>CodeContextor ile oluşturuldu</p>
+            <p>{created_with_text}</p>
         </div>
         <div class="content">
             <div class="mermaid">

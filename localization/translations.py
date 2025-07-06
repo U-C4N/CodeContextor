@@ -70,6 +70,29 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "diagram_api_error": "Gemini API key is not set. Please check settings.",
         "diagram_error_title": "Error",
         
+        # Diagram generation process messages
+        "diagram_loading_title": "Generating Diagram...",
+        "diagram_gemini_working": "🤖 Gemini AI Working...",
+        "diagram_please_wait": "Please wait...",
+        "diagram_client_error": "Gemini API client could not be started.",
+        "diagram_generation_failed": "Diagram could not be generated.",
+        "diagram_error_occurred": "An error occurred:",
+        "diagram_fallback_title": "Diagram",
+        
+        # Diagram result dialog messages
+        "diagram_created_success": "✅ {title} Created!",
+        "diagram_mermaid_code_label": "📋 Mermaid Code:",
+        "diagram_preview_label": "👁️ Preview:",
+        "diagram_preview_info": "💡 Simple preview - Use browser button for full view",
+        "diagram_full_view_button": "🌐 Full View",
+        "diagram_copy_button": "📋 Copy Code",
+        "diagram_close_button": "❌ Close",
+        "diagram_copy_success_title": "✅ Copied",
+        "diagram_copy_success_message": "Mermaid code copied to clipboard!",
+        
+        # HTML preview messages
+        "diagram_html_created_with": "Created with CodeContextor",
+        
         # Error handling messages
         "error_title": "Error",
         "warning_title": "Warning",
@@ -155,6 +178,48 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         # Diagram generation messages
         "diagram_warning_title": "Uyarı",
         "diagram_no_code_selected": "Lütfen önce sol panelden dosyaları seçin ve kod analiz edilsin.",
+        
+        # Diagram descriptions
+        "diagram_module_dependency_desc": "Import zinciri ve bottleneck modülleri",
+        "diagram_architecture_desc": "Servisler, API katmanları, DB",
+        "diagram_class_hierarchy_desc": "OOP sınıflar ve kalıtım",
+        "diagram_sequence_desc": "REST çağrıları ve iş akışı",
+        "diagram_data_model_desc": "Tablolar ve ilişkiler",
+        "diagram_state_machine_desc": "Finite state'ler ve geçişler",
+        
+        # Diagram dialog messages
+        "diagram_dialog_title": "Diyagram Oluşturucu",
+        "diagram_select_type": "🎨 Diyagram Tipi Seçin",
+        "diagram_generate_button": "✨ Diyagram Oluştur",
+        "diagram_cancel_button": "❌ İptal",
+        "diagram_select_warning": "Lütfen bir diyagram tipi seçin.",
+        "diagram_select_code_warning": "Lütfen analiz edilecek kod seçin.",
+        "diagram_tip": "💡 İpucu: Sol panelden dosyaları seçin, sonra diyagram oluşturun",
+        "diagram_api_error": "Gemini API anahtarı ayarlanmamış. Lütfen ayarları kontrol edin.",
+        "diagram_error_title": "Hata",
+        
+        # Diagram generation process messages
+        "diagram_loading_title": "Diyagram Oluşturuluyor...",
+        "diagram_gemini_working": "🤖 Gemini AI Çalışıyor...",
+        "diagram_please_wait": "Lütfen bekleyin...",
+        "diagram_client_error": "Gemini API client başlatılamadı.",
+        "diagram_generation_failed": "Diyagram oluşturulamadı.",
+        "diagram_error_occurred": "Bir hata oluştu:",
+        "diagram_fallback_title": "Diyagram",
+        
+        # Diagram result dialog messages
+        "diagram_created_success": "✅ {title} Oluşturuldu!",
+        "diagram_mermaid_code_label": "📋 Mermaid Kodu:",
+        "diagram_preview_label": "👁️ Preview:",
+        "diagram_preview_info": "💡 Basit önizleme - Tam görüntü için tarayıcı butonunu kullanın",
+        "diagram_full_view_button": "🌐 Tam Görüntü",
+        "diagram_copy_button": "📋 Kodu Kopyala",
+        "diagram_close_button": "❌ Kapat",
+        "diagram_copy_success_title": "✅ Kopyalandı",
+        "diagram_copy_success_message": "Mermaid kodu panoya kopyalandı!",
+        
+        # HTML preview messages
+        "diagram_html_created_with": "CodeContextor ile oluşturuldu",
         
         # Error handling messages
         "error_title": "Hata",
@@ -242,6 +307,48 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "diagram_warning_title": "Предупреждение",
         "diagram_no_code_selected": "Сначала выберите файлы из левой панели и позвольте коду быть проанализированным.",
         
+        # Diagram descriptions
+        "diagram_module_dependency_desc": "Цепочка импорта и узкие места модулей",
+        "diagram_architecture_desc": "Сервисы, API слои, БД",
+        "diagram_class_hierarchy_desc": "ООП классы и наследование",
+        "diagram_sequence_desc": "REST вызовы и рабочий процесс",
+        "diagram_data_model_desc": "Таблицы и отношения",
+        "diagram_state_machine_desc": "Конечные состояния и переходы",
+        
+        # Diagram dialog messages
+        "diagram_dialog_title": "Генератор диаграмм",
+        "diagram_select_type": "🎨 Выберите тип диаграммы",
+        "diagram_generate_button": "✨ Создать диаграмму",
+        "diagram_cancel_button": "❌ Отмена",
+        "diagram_select_warning": "Пожалуйста, выберите тип диаграммы.",
+        "diagram_select_code_warning": "Пожалуйста, выберите код для анализа.",
+        "diagram_tip": "💡 Совет: Выберите файлы на левой панели, затем создайте диаграмму",
+        "diagram_api_error": "Ключ API Gemini не установлен. Пожалуйста, проверьте настройки.",
+        "diagram_error_title": "Ошибка",
+        
+        # Diagram generation process messages
+        "diagram_loading_title": "Создание диаграммы...",
+        "diagram_gemini_working": "🤖 Gemini AI работает...",
+        "diagram_please_wait": "Пожалуйста, подождите...",
+        "diagram_client_error": "Клиент Gemini API не удалось запустить.",
+        "diagram_generation_failed": "Диаграмма не может быть создана.",
+        "diagram_error_occurred": "Произошла ошибка:",
+        "diagram_fallback_title": "Диаграмма",
+        
+        # Diagram result dialog messages
+        "diagram_created_success": "✅ {title} создана!",
+        "diagram_mermaid_code_label": "📋 Код Mermaid:",
+        "diagram_preview_label": "👁️ Предпросмотр:",
+        "diagram_preview_info": "💡 Простой предпросмотр - используйте кнопку браузера для полного просмотра",
+        "diagram_full_view_button": "🌐 Полный просмотр",
+        "diagram_copy_button": "📋 Копировать код",
+        "diagram_close_button": "❌ Закрыть",
+        "diagram_copy_success_title": "✅ Скопировано",
+        "diagram_copy_success_message": "Код Mermaid скопирован в буфер обмена!",
+        
+        # HTML preview messages
+        "diagram_html_created_with": "Создано с помощью CodeContextor",
+        
         # Error handling messages
         "error_title": "Ошибка",
         "warning_title": "Предупреждение",
@@ -327,6 +434,48 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         # Diagram generation messages
         "diagram_warning_title": "Advertencia",
         "diagram_no_code_selected": "Primero seleccione archivos del panel izquierdo y permita que el código sea analizado.",
+        
+        # Diagram descriptions
+        "diagram_module_dependency_desc": "Cadena de importación y módulos cuello de botella",
+        "diagram_architecture_desc": "Servicios, capas API, BD",
+        "diagram_class_hierarchy_desc": "Clases POO y herencia",
+        "diagram_sequence_desc": "Llamadas REST y flujo de trabajo",
+        "diagram_data_model_desc": "Tablas y relaciones",
+        "diagram_state_machine_desc": "Estados finitos y transiciones",
+        
+        # Diagram dialog messages
+        "diagram_dialog_title": "Generador de Diagramas",
+        "diagram_select_type": "🎨 Seleccione Tipo de Diagrama",
+        "diagram_generate_button": "✨ Generar Diagrama",
+        "diagram_cancel_button": "❌ Cancelar",
+        "diagram_select_warning": "Por favor seleccione un tipo de diagrama.",
+        "diagram_select_code_warning": "Por favor seleccione código para analizar.",
+        "diagram_tip": "💡 Consejo: Seleccione archivos del panel izquierdo, luego genere diagrama",
+        "diagram_api_error": "La clave API de Gemini no está configurada. Por favor verifique la configuración.",
+        "diagram_error_title": "Error",
+        
+        # Diagram generation process messages
+        "diagram_loading_title": "Generando Diagrama...",
+        "diagram_gemini_working": "🤖 Gemini AI Trabajando...",
+        "diagram_please_wait": "Por favor espere...",
+        "diagram_client_error": "No se pudo iniciar el cliente API de Gemini.",
+        "diagram_generation_failed": "No se pudo generar el diagrama.",
+        "diagram_error_occurred": "Ocurrió un error:",
+        "diagram_fallback_title": "Diagrama",
+        
+        # Diagram result dialog messages
+        "diagram_created_success": "✅ ¡{title} Creado!",
+        "diagram_mermaid_code_label": "📋 Código Mermaid:",
+        "diagram_preview_label": "👁️ Vista Previa:",
+        "diagram_preview_info": "💡 Vista previa simple - Use el botón del navegador para vista completa",
+        "diagram_full_view_button": "🌐 Vista Completa",
+        "diagram_copy_button": "📋 Copiar Código",
+        "diagram_close_button": "❌ Cerrar",
+        "diagram_copy_success_title": "✅ Copiado",
+        "diagram_copy_success_message": "¡Código Mermaid copiado al portapapeles!",
+        
+        # HTML preview messages
+        "diagram_html_created_with": "Creado con CodeContextor",
         
         # Error handling messages
         "error_title": "Error",
@@ -414,6 +563,48 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "diagram_warning_title": "Aviso",
         "diagram_no_code_selected": "Primeiro selecione arquivos do painel esquerdo e permita que o código seja analisado.",
         
+        # Diagram descriptions
+        "diagram_module_dependency_desc": "Cadeia de importação e módulos gargalo",
+        "diagram_architecture_desc": "Serviços, camadas API, BD",
+        "diagram_class_hierarchy_desc": "Classes POO e herança",
+        "diagram_sequence_desc": "Chamadas REST e fluxo de trabalho",
+        "diagram_data_model_desc": "Tabelas e relacionamentos",
+        "diagram_state_machine_desc": "Estados finitos e transições",
+        
+        # Diagram dialog messages
+        "diagram_dialog_title": "Gerador de Diagramas",
+        "diagram_select_type": "🎨 Selecione Tipo de Diagrama",
+        "diagram_generate_button": "✨ Gerar Diagrama",
+        "diagram_cancel_button": "❌ Cancelar",
+        "diagram_select_warning": "Por favor selecione um tipo de diagrama.",
+        "diagram_select_code_warning": "Por favor selecione código para analisar.",
+        "diagram_tip": "💡 Dica: Selecione arquivos do painel esquerdo, depois gere diagrama",
+        "diagram_api_error": "A chave API do Gemini não está configurada. Por favor verifique as configurações.",
+        "diagram_error_title": "Erro",
+        
+        # Diagram generation process messages
+        "diagram_loading_title": "Gerando Diagrama...",
+        "diagram_gemini_working": "🤖 Gemini AI Trabalhando...",
+        "diagram_please_wait": "Por favor aguarde...",
+        "diagram_client_error": "Não foi possível iniciar o cliente API Gemini.",
+        "diagram_generation_failed": "Não foi possível gerar o diagrama.",
+        "diagram_error_occurred": "Ocorreu um erro:",
+        "diagram_fallback_title": "Diagrama",
+        
+        # Diagram result dialog messages
+        "diagram_created_success": "✅ {title} Criado!",
+        "diagram_mermaid_code_label": "📋 Código Mermaid:",
+        "diagram_preview_label": "👁️ Visualização:",
+        "diagram_preview_info": "💡 Visualização simples - Use o botão do navegador para visualização completa",
+        "diagram_full_view_button": "🌐 Visualização Completa",
+        "diagram_copy_button": "📋 Copiar Código",
+        "diagram_close_button": "❌ Fechar",
+        "diagram_copy_success_title": "✅ Copiado",
+        "diagram_copy_success_message": "Código Mermaid copiado para a área de transferência!",
+        
+        # HTML preview messages
+        "diagram_html_created_with": "Criado com CodeContextor",
+        
         # Error handling messages
         "error_title": "Erro",
         "warning_title": "Aviso",
@@ -499,6 +690,48 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         # Diagram generation messages
         "diagram_warning_title": "Avertissement",
         "diagram_no_code_selected": "Veuillez d'abord sélectionner des fichiers depuis le panneau gauche et laisser le code être analysé.",
+        
+        # Diagram descriptions
+        "diagram_module_dependency_desc": "Chaîne d'importation et modules goulot d'étranglement",
+        "diagram_architecture_desc": "Services, couches API, BD",
+        "diagram_class_hierarchy_desc": "Classes POO et héritage",
+        "diagram_sequence_desc": "Appels REST et flux de travail",
+        "diagram_data_model_desc": "Tables et relations",
+        "diagram_state_machine_desc": "États finis et transitions",
+        
+        # Diagram dialog messages
+        "diagram_dialog_title": "Générateur de Diagrammes",
+        "diagram_select_type": "🎨 Sélectionnez Type de Diagramme",
+        "diagram_generate_button": "✨ Générer Diagramme",
+        "diagram_cancel_button": "❌ Annuler",
+        "diagram_select_warning": "Veuillez sélectionner un type de diagramme.",
+        "diagram_select_code_warning": "Veuillez sélectionner du code à analyser.",
+        "diagram_tip": "💡 Astuce : Sélectionnez des fichiers du panneau gauche, puis générez diagramme",
+        "diagram_api_error": "La clé API Gemini n'est pas configurée. Veuillez vérifier les paramètres.",
+        "diagram_error_title": "Erreur",
+        
+        # Diagram generation process messages
+        "diagram_loading_title": "Génération du Diagramme...",
+        "diagram_gemini_working": "🤖 Gemini AI en Cours...",
+        "diagram_please_wait": "Veuillez patienter...",
+        "diagram_client_error": "Impossible de démarrer le client API Gemini.",
+        "diagram_generation_failed": "Impossible de générer le diagramme.",
+        "diagram_error_occurred": "Une erreur s'est produite :",
+        "diagram_fallback_title": "Diagramme",
+        
+        # Diagram result dialog messages
+        "diagram_created_success": "✅ {title} Créé !",
+        "diagram_mermaid_code_label": "📋 Code Mermaid :",
+        "diagram_preview_label": "👁️ Aperçu :",
+        "diagram_preview_info": "💡 Aperçu simple - Utilisez le bouton navigateur pour la vue complète",
+        "diagram_full_view_button": "🌐 Vue Complète",
+        "diagram_copy_button": "📋 Copier le Code",
+        "diagram_close_button": "❌ Fermer",
+        "diagram_copy_success_title": "✅ Copié",
+        "diagram_copy_success_message": "Code Mermaid copié dans le presse-papiers !",
+        
+        # HTML preview messages
+        "diagram_html_created_with": "Créé avec CodeContextor",
         
         # Error handling messages
         "error_title": "Erreur",
@@ -586,6 +819,48 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "diagram_warning_title": "Avvertimento",
         "diagram_no_code_selected": "Seleziona prima i file dal pannello sinistro e lascia che il codice venga analizzato.",
         
+        # Diagram descriptions
+        "diagram_module_dependency_desc": "Catena di importazione e moduli collo di bottiglia",
+        "diagram_architecture_desc": "Servizi, strati API, BD",
+        "diagram_class_hierarchy_desc": "Classi POO ed ereditarietà",
+        "diagram_sequence_desc": "Chiamate REST e flusso di lavoro",
+        "diagram_data_model_desc": "Tabelle e relazioni",
+        "diagram_state_machine_desc": "Stati finiti e transizioni",
+        
+        # Diagram dialog messages
+        "diagram_dialog_title": "Generatore di Diagrammi",
+        "diagram_select_type": "🎨 Seleziona Tipo di Diagramma",
+        "diagram_generate_button": "✨ Genera Diagramma",
+        "diagram_cancel_button": "❌ Annulla",
+        "diagram_select_warning": "Seleziona un tipo di diagramma.",
+        "diagram_select_code_warning": "Seleziona codice da analizzare.",
+        "diagram_tip": "💡 Suggerimento: Seleziona file dal pannello sinistro, poi genera diagramma",
+        "diagram_api_error": "La chiave API Gemini non è configurata. Controlla le impostazioni.",
+        "diagram_error_title": "Errore",
+        
+        # Diagram generation process messages
+        "diagram_loading_title": "Generazione Diagramma...",
+        "diagram_gemini_working": "🤖 Gemini AI in Lavorazione...",
+        "diagram_please_wait": "Attendere prego...",
+        "diagram_client_error": "Impossibile avviare il client API Gemini.",
+        "diagram_generation_failed": "Impossibile generare il diagramma.",
+        "diagram_error_occurred": "Si è verificato un errore:",
+        "diagram_fallback_title": "Diagramma",
+        
+        # Diagram result dialog messages
+        "diagram_created_success": "✅ {title} Creato!",
+        "diagram_mermaid_code_label": "📋 Codice Mermaid:",
+        "diagram_preview_label": "👁️ Anteprima:",
+        "diagram_preview_info": "💡 Anteprima semplice - Usa il pulsante browser per la vista completa",
+        "diagram_full_view_button": "🌐 Vista Completa",
+        "diagram_copy_button": "📋 Copia Codice",
+        "diagram_close_button": "❌ Chiudi",
+        "diagram_copy_success_title": "✅ Copiato",
+        "diagram_copy_success_message": "Codice Mermaid copiato negli appunti!",
+        
+        # HTML preview messages
+        "diagram_html_created_with": "Creato con CodeContextor",
+        
         # Error handling messages
         "error_title": "Errore",
         "warning_title": "Avvertimento",
@@ -671,6 +946,48 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         # Diagram generation messages
         "diagram_warning_title": "Попередження",
         "diagram_no_code_selected": "Спочатку виберіть файли з лівої панелі і дозвольте коду бути проаналізованим.",
+        
+        # Diagram descriptions
+        "diagram_module_dependency_desc": "Ланцюжок імпорту та модулі вузьких місць",
+        "diagram_architecture_desc": "Сервіси, шари API, БД",
+        "diagram_class_hierarchy_desc": "ООП класи та наслідування",
+        "diagram_sequence_desc": "REST виклики та робочий процес",
+        "diagram_data_model_desc": "Таблиці та зв'язки",
+        "diagram_state_machine_desc": "Кінцеві стани та переходи",
+        
+        # Diagram dialog messages
+        "diagram_dialog_title": "Генератор діаграм",
+        "diagram_select_type": "🎨 Виберіть тип діаграми",
+        "diagram_generate_button": "✨ Створити діаграму",
+        "diagram_cancel_button": "❌ Скасувати",
+        "diagram_select_warning": "Будь ласка, виберіть тип діаграми.",
+        "diagram_select_code_warning": "Будь ласка, виберіть код для аналізу.",
+        "diagram_tip": "💡 Порада: Виберіть файли з лівої панелі, потім створіть діаграму",
+        "diagram_api_error": "Ключ API Gemini не встановлено. Будь ласка, перевірте налаштування.",
+        "diagram_error_title": "Помилка",
+        
+        # Diagram generation process messages
+        "diagram_loading_title": "Створення діаграми...",
+        "diagram_gemini_working": "🤖 Gemini AI працює...",
+        "diagram_please_wait": "Будь ласка, зачекайте...",
+        "diagram_client_error": "Не вдалося запустити клієнт API Gemini.",
+        "diagram_generation_failed": "Не вдалося створити діаграму.",
+        "diagram_error_occurred": "Сталася помилка:",
+        "diagram_fallback_title": "Діаграма",
+        
+        # Diagram result dialog messages
+        "diagram_created_success": "✅ {title} створено!",
+        "diagram_mermaid_code_label": "📋 Код Mermaid:",
+        "diagram_preview_label": "👁️ Попередній перегляд:",
+        "diagram_preview_info": "💡 Простий попередній перегляд - використовуйте кнопку браузера для повного перегляду",
+        "diagram_full_view_button": "🌐 Повний перегляд",
+        "diagram_copy_button": "📋 Копіювати код",
+        "diagram_close_button": "❌ Закрити",
+        "diagram_copy_success_title": "✅ Скопійовано",
+        "diagram_copy_success_message": "Код Mermaid скопійовано в буфер обміну!",
+        
+        # HTML preview messages
+        "diagram_html_created_with": "Створено за допомогою CodeContextor",
         
         # Error handling messages
         "error_title": "Помилка",
@@ -758,6 +1075,48 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "diagram_warning_title": "Warnung",
         "diagram_no_code_selected": "Bitte wählen Sie zuerst Dateien aus dem linken Bereich aus und lassen Sie den Code analysieren.",
         
+        # Diagram descriptions
+        "diagram_module_dependency_desc": "Importkette und Engpass-Module",
+        "diagram_architecture_desc": "Dienste, API-Schichten, DB",
+        "diagram_class_hierarchy_desc": "OOP-Klassen und Vererbung",
+        "diagram_sequence_desc": "REST-Aufrufe und Arbeitsablauf",
+        "diagram_data_model_desc": "Tabellen und Beziehungen",
+        "diagram_state_machine_desc": "Endliche Zustände und Übergänge",
+        
+        # Diagram dialog messages
+        "diagram_dialog_title": "Diagramm-Generator",
+        "diagram_select_type": "🎨 Diagrammtyp auswählen",
+        "diagram_generate_button": "✨ Diagramm erstellen",
+        "diagram_cancel_button": "❌ Abbrechen",
+        "diagram_select_warning": "Bitte wählen Sie einen Diagrammtyp aus.",
+        "diagram_select_code_warning": "Bitte wählen Sie Code zum Analysieren aus.",
+        "diagram_tip": "💡 Tipp: Wählen Sie Dateien aus dem linken Bereich, dann erstellen Sie Diagramm",
+        "diagram_api_error": "Gemini API-Schlüssel ist nicht konfiguriert. Bitte überprüfen Sie die Einstellungen.",
+        "diagram_error_title": "Fehler",
+        
+        # Diagram generation process messages
+        "diagram_loading_title": "Diagramm Erstellen...",
+        "diagram_gemini_working": "🤖 Gemini AI Arbeitet...",
+        "diagram_please_wait": "Bitte warten...",
+        "diagram_client_error": "Gemini API-Client konnte nicht gestartet werden.",
+        "diagram_generation_failed": "Diagramm konnte nicht erstellt werden.",
+        "diagram_error_occurred": "Ein Fehler ist aufgetreten:",
+        "diagram_fallback_title": "Diagramm",
+        
+        # Diagram result dialog messages
+        "diagram_created_success": "✅ {title} Erstellt!",
+        "diagram_mermaid_code_label": "📋 Mermaid Code:",
+        "diagram_preview_label": "👁️ Vorschau:",
+        "diagram_preview_info": "💡 Einfache Vorschau - Verwenden Sie die Browser-Schaltfläche für vollständige Ansicht",
+        "diagram_full_view_button": "🌐 Vollständige Ansicht",
+        "diagram_copy_button": "📋 Code Kopieren",
+        "diagram_close_button": "❌ Schließen",
+        "diagram_copy_success_title": "✅ Kopiert",
+        "diagram_copy_success_message": "Mermaid Code in die Zwischenablage kopiert!",
+        
+        # HTML preview messages
+        "diagram_html_created_with": "Erstellt mit CodeContextor",
+        
         # Error handling messages
         "error_title": "Fehler",
         "warning_title": "Warnung",
@@ -843,6 +1202,48 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         # Diagram generation messages
         "diagram_warning_title": "Waarschuwing",
         "diagram_no_code_selected": "Selecteer eerst bestanden uit het linkerpaneel en laat de code worden geanalyseerd.",
+        
+        # Diagram descriptions
+        "diagram_module_dependency_desc": "Importketting en knelpuntmodules",
+        "diagram_architecture_desc": "Services, API-lagen, DB",
+        "diagram_class_hierarchy_desc": "OOP-klassen en overerving",
+        "diagram_sequence_desc": "REST-oproepen en workflow",
+        "diagram_data_model_desc": "Tabellen en relaties",
+        "diagram_state_machine_desc": "Eindige toestanden en overgangen",
+        
+        # Diagram dialog messages
+        "diagram_dialog_title": "Diagram Generator",
+        "diagram_select_type": "🎨 Selecteer Diagram Type",
+        "diagram_generate_button": "✨ Diagram Genereren",
+        "diagram_cancel_button": "❌ Annuleren",
+        "diagram_select_warning": "Selecteer een diagram type.",
+        "diagram_select_code_warning": "Selecteer code om te analyseren.",
+        "diagram_tip": "💡 Tip: Selecteer bestanden uit linkerpaneel, genereer dan diagram",
+        "diagram_api_error": "Gemini API-sleutel is niet geconfigureerd. Controleer de instellingen.",
+        "diagram_error_title": "Fout",
+        
+        # Diagram generation process messages
+        "diagram_loading_title": "Diagram Genereren...",
+        "diagram_gemini_working": "🤖 Gemini AI Werkt...",
+        "diagram_please_wait": "Even geduld alstublieft...",
+        "diagram_client_error": "Kon Gemini API-client niet starten.",
+        "diagram_generation_failed": "Kon diagram niet genereren.",
+        "diagram_error_occurred": "Er is een fout opgetreden:",
+        "diagram_fallback_title": "Diagram",
+        
+        # Diagram result dialog messages
+        "diagram_created_success": "✅ {title} Gemaakt!",
+        "diagram_mermaid_code_label": "📋 Mermaid Code:",
+        "diagram_preview_label": "👁️ Voorbeeld:",
+        "diagram_preview_info": "💡 Eenvoudig voorbeeld - Gebruik browserknop voor volledige weergave",
+        "diagram_full_view_button": "🌐 Volledige Weergave",
+        "diagram_copy_button": "📋 Code Kopiëren",
+        "diagram_close_button": "❌ Sluiten",
+        "diagram_copy_success_title": "✅ Gekopieerd",
+        "diagram_copy_success_message": "Mermaid code gekopieerd naar klembord!",
+        
+        # HTML preview messages
+        "diagram_html_created_with": "Gemaakt met CodeContextor",
         
         # Error handling messages
         "error_title": "Fout",
